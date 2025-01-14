@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'crossword/crossword.dart';
+import 'word_search/word_grid.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,9 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<List<String>> grid = test();
-    
-      print(grid);
-    
+    print(grid);
     return MaterialApp();
   }
 }
