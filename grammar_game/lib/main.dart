@@ -10,7 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(test());
+    List<List<String>> grid = test();
+    
+      print(grid);
+    
     return MaterialApp();
   }
 }
