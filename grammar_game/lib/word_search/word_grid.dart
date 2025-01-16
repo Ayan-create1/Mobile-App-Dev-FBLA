@@ -14,12 +14,12 @@ List<List<String>> test() {
     'run': "present",
     'fought': "past",
     'saw': "present",
-    'will go': "future",
-    'will see': "future",
+    'will_go': "future",
+    'will_see': "future",
   };
 
   List<String> keys = words.keys.toList();
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 4; i++) {
     int num = random.nextInt(keys.length);
     randKeys.add(keys[num]);
     keys.remove(keys[num]);
