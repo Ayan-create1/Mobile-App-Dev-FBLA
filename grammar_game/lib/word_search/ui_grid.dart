@@ -47,7 +47,8 @@ Widget _buildUI() {
     List<Widget> cells = [];
     //*for each letter in the row
     for (var cell in row) {
-      //Here we will make a container for each cell in the row
+      //*Here we will make a container for each cell in the row
+      //!Here is where we can add the draggable property
       cells.add(
         Container(
           alignment: Alignment.center,
