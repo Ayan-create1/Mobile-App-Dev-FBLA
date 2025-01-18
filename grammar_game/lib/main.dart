@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'word_search/ui_grid.dart';
+//! Implement a feature that only allows horizontal or vertical path
+//! Implement a word box to fill bottom half of screen
 
 void main() {
   runApp(MyApp());

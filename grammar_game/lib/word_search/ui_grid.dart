@@ -4,7 +4,9 @@ import 'word_grid.dart';
 
 Map<String, bool> highlightStatus = {};
 Map<String, bool> correctWords = {};
-List<String> words = getWords();
+List<List<String>> myDict = getWords();
+List<String> words = myDict[0];
+List<String> hints = myDict[1];
 List<List<String>> grid = test(words);
 String? currenthighlightStatus;
 String? currentcorrectWords;
@@ -50,7 +52,8 @@ class _WordGridState extends State<WordSearchGame> {
             onPanStart: _handlePanStart,
             onPanUpdate: _handlePanUpdate,
             onPanEnd: (_) => _resolveHighlights(),
-            child: _buildUI()),
+            child: _buildUI(),
+        ),
       ),
     );
   }
@@ -120,10 +123,10 @@ class _WordGridState extends State<WordSearchGame> {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
-    int row = ((localPosition.dy / 31).floor()) - 4;
-    int column = ((localPosition.dx / 31).floor()) - 1;
+    int row = ((localPosition.dy / 32).floor()) - 4;
+    int column = ((localPosition.dx / 32).floor()) - 1;
 
-    if (row >= 0 && column >= 0 && row < rowL && column < colL) {
+    if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
       String cellKey = "$row-$column";
 
       setState(() {

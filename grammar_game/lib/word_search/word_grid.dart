@@ -2,36 +2,71 @@ import 'check_methods.dart';
 import 'placement_methods.dart';
 import 'dart:math';
 
-List<String> getWords() {
+List<List<String>> getWords() {
   Random random = Random();
 //int randomInt = random.nextInt(101); 0 10 100
 //print ('random number: $randomInt');
 //matrix[vertical][horizontal]]
 
   List<String> randKeys = [];
+  List<String> randVals = [];
 
   Map<String, String> words = {
     'run': "present",
     'fought': "past",
     'saw': "present",
-    'will_go': "future",
-    'will_see': "future",
+    'will-go': "future",
+    'will-see': "future",
     'drank': "past",
-    'could_work': "conditional",
+    'could-work': "conditional",
   };
 
   List<String> keys = words.keys.toList();
+  List<String> vals = words.values.toList();
+
   for (int i = 0; i < 4; i++) {
     int num = random.nextInt(keys.length);
     randKeys.add(keys[num]);
+    randVals.add(vals[num]);
     keys.remove(keys[num]);
+    randVals.remove(vals[num]);
   }
 
-  return randKeys;
+  return [randKeys, randVals];
 }
 
 List<List<String>> test(List<String> randKeys) {
   Random random = Random();
+
+  List<String> letterList = [
+    '-',
+    'a',
+    'b',
+    'c',
+    'd',
+    'e',
+    'f',
+    'g',
+    'h',
+    'i',
+    'j',
+    'k',
+    'l',
+    'm',
+    'n',
+    'o',
+    'p',
+    'q',
+    'r',
+    's',
+    't',
+    'u',
+    'v',
+    'w',
+    'x',
+    'y',
+    'z'
+  ];
 
   List<List<String>> matrix = [
     ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
@@ -71,6 +106,15 @@ List<List<String>> test(List<String> randKeys) {
         } else {
           continue;
         }
+      }
+    }
+  }
+
+  for (int i = 0; i < matrix.length; i++) {
+    for (int j = 0; j < matrix[i].length; j++) {
+      if (matrix[i][j] == "_") {
+        int index = random.nextInt(27);
+        matrix[i][j] = letterList[index];
       }
     }
   }
