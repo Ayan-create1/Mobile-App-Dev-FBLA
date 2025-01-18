@@ -16,6 +16,8 @@ List<List<String>> test() {
     'saw': "present",
     'will_go': "future",
     'will_see': "future",
+    'drank': "past",
+    'could_work': "conditional",
   };
 
   List<String> keys = words.keys.toList();

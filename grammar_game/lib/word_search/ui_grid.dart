@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'word_grid.dart';
+//import 'dart:async';
 
 Map<String, bool> highlightStatus = {};
 List<List<String>> grid = test();
+String? currenthighlightStatus;
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -15,6 +17,10 @@ class WordSearchGame extends StatefulWidget {
 }
 
 class _WordGridState extends State<WordSearchGame> {
+  final double cellSize = 30.0;
+  final int rowL = 9;
+  final int colL = 9;
+
   @override
   Widget build(BuildContext context) {
     //*Scaffold will define new page in application
@@ -33,7 +39,13 @@ class _WordGridState extends State<WordSearchGame> {
         backgroundColor: Colors.black,
       ),
       //*Body will define how the scaffold looks
-      body: _buildUI(),
+      body: Center(
+        child: GestureDetector(
+            onPanStart: _handlePanStart,
+            onPanUpdate: _handlePanUpdate,
+            onPanEnd: (_) => _clearHighlights(),
+            child: _buildUI()),
+      ),
     );
   }
 
@@ -45,31 +57,26 @@ class _WordGridState extends State<WordSearchGame> {
         String letterKey = "$i-$j";
 
         cells.add(
-          GestureDetector(
-            onPanStart: (details) => _highlightCell(i, j),
-            onPanUpdate: (details) => _highlightCell(i, j),
-            onPanEnd: (details) => _uncolorCell(i, j),
-            child: Container(
-              alignment: Alignment.center,
-              width: 27,
-              height: 27,
-              margin: EdgeInsets.all(3),
-              decoration: BoxDecoration(
-                color: highlightStatus[letterKey] == true
-                    ? Colors.blue[200]
-                    : Colors.transparent,
-                /*
+          Container(
+            alignment: Alignment.center,
+            width: 27,
+            height: 27,
+            margin: EdgeInsets.all(3),
+            decoration: BoxDecoration(
+              color: highlightStatus[letterKey] == true
+                  ? Colors.blue[200]
+                  : Colors.transparent,
+              /*
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(4),
                   */
-              ),
-              child: Text(
-                grid[i][j],
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            child: Text(
+              grid[i][j],
+              style: TextStyle(
+                color: Colors.amber,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
@@ -94,18 +101,33 @@ class _WordGridState extends State<WordSearchGame> {
     );
   }
 
-  void _highlightCell(int row, int column) {
-    String letterKey = "$row-$column";
-
-    setState(() {
-      highlightStatus[letterKey] = true;
-    });
+  void _handlePanStart(DragStartDetails details) {
+    _handleDrag(details.globalPosition);
   }
 
-  void _uncolorCell(int row, int column) {
-    String letterKey = "$row-$column";
+  void _handlePanUpdate(DragUpdateDetails details) {
+    _handleDrag(details.globalPosition);
+  }
+
+  void _handleDrag(Offset globalPosition) {
+    final RenderBox gridBox = context.findRenderObject() as RenderBox;
+    final Offset localPosition = gridBox.globalToLocal(globalPosition);
+
+    int row = (localPosition.dy / 27).floor();
+    int column = (localPosition.dx / 27).floor();
+
+    if (row >= 0 && column >= 0 && row < rowL && column < colL) {
+      String cellKey = "$row-$column";
+
+      setState(() {
+        highlightStatus[cellKey] = true;
+      });
+    }
+  }
+
+  void _clearHighlights() {
     setState(() {
-      highlightStatus[letterKey] = false;
+      highlightStatus.clear();
     });
   }
 }
