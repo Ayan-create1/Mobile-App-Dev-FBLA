@@ -3,8 +3,14 @@ import 'word_grid.dart';
 //import 'dart:async';
 
 Map<String, bool> highlightStatus = {};
-List<List<String>> grid = test();
+Map<String, bool> correctWords = {};
+List<String> words = getWords();
+List<List<String>> grid = test(words);
 String? currenthighlightStatus;
+String? currentcorrectWords;
+List<String> highlightedWords = [];
+int oRow = 0;
+int oCol = 0;
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -33,7 +39,7 @@ class _WordGridState extends State<WordSearchGame> {
         title: Text(
           "SEARCH TENSE",
           style: TextStyle(
-            color: Colors.yellow,
+            color: Colors.white,
           ),
         ),
         backgroundColor: Colors.black,
@@ -43,7 +49,7 @@ class _WordGridState extends State<WordSearchGame> {
         child: GestureDetector(
             onPanStart: _handlePanStart,
             onPanUpdate: _handlePanUpdate,
-            onPanEnd: (_) => _clearHighlights(),
+            onPanEnd: (_) => _resolveHighlights(),
             child: _buildUI()),
       ),
     );
@@ -63,8 +69,10 @@ class _WordGridState extends State<WordSearchGame> {
             margin: EdgeInsets.all(3),
             decoration: BoxDecoration(
               color: highlightStatus[letterKey] == true
-                  ? Colors.blue[200]
-                  : Colors.transparent,
+                  ? Colors.purple[300]
+                  : correctWords[letterKey] == true
+                      ? Colors.green
+                      : Colors.transparent,
               /*
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(4),
@@ -73,7 +81,7 @@ class _WordGridState extends State<WordSearchGame> {
             child: Text(
               grid[i][j],
               style: TextStyle(
-                color: Colors.amber,
+                color: Colors.white,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -121,12 +129,33 @@ class _WordGridState extends State<WordSearchGame> {
       setState(() {
         highlightStatus[cellKey] = true;
       });
+      if (oRow != row || oCol != column) {
+        highlightedWords.add(grid[row][column]);
+        oRow = row;
+        oCol = column;
+      }
     }
   }
 
-  void _clearHighlights() {
+  void _resolveHighlights() {
+    bool status = false;
+
+    String checkWord = highlightedWords.join('');
+    for (int i = 0; i < words.length; i++) {
+      if (words[i] == checkWord) {
+        status = true;
+        if (status == true) {
+          correctWords.addAll(highlightStatus);
+        }
+        break;
+      }
+    }
+    print("$words");
+    print("$highlightedWords-$checkWord-$status");
+
     setState(() {
       highlightStatus.clear();
     });
+    highlightedWords.clear();
   }
 }

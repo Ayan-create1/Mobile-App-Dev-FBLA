@@ -2,7 +2,7 @@ import 'check_methods.dart';
 import 'placement_methods.dart';
 import 'dart:math';
 
-List<List<String>> test() {
+List<String> getWords() {
   Random random = Random();
 //int randomInt = random.nextInt(101); 0 10 100
 //print ('random number: $randomInt');
@@ -26,6 +26,12 @@ List<List<String>> test() {
     randKeys.add(keys[num]);
     keys.remove(keys[num]);
   }
+
+  return randKeys;
+}
+
+List<List<String>> test(List<String> randKeys) {
+  Random random = Random();
 
   List<List<String>> matrix = [
     ["_", "_", "_", "_", "_", "_", "_", "_", "_", "_"],
