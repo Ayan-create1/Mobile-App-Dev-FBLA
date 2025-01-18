@@ -5,9 +5,11 @@ Map<String, bool> highlightStatus = {};
 List<List<String>> grid = test();
 
 //!Made using generative AI tools
+//*This class will display the wordsearch page
 class WordSearchGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
+    //*Will display the state of the grid
     return _WordGridState();
   }
 }
@@ -16,8 +18,9 @@ class _WordGridState extends State<WordSearchGame> {
   @override
   Widget build(BuildContext context) {
     //*Scaffold will define new page in application
+    //*Returns the entire project page
     return Scaffold(
-      //*Will show text login at the top
+      //*Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
         //*Will show title of screen and center that title
         centerTitle: true,
