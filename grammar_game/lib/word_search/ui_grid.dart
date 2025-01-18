@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'word_grid.dart';
 
+Map<String, bool> highlightStatus = {};
+List<List<String>> grid = test();
+
 //!Made using generative AI tools
 class WordSearchGame extends StatefulWidget {
   @override
@@ -30,50 +33,76 @@ class _WordGridState extends State<WordSearchGame> {
       body: _buildUI(),
     );
   }
-}
 
-Widget _buildUI() {
-  List<List<String>> grid = test();
-  List<Widget> rows = [];
-  for (var row in grid) {
-    List<Widget> cells = [];
-    for (var cell in row) {
-      cells.add(
-        Container(
-          alignment: Alignment.center,
-          width: 27,
-          height: 27,
-          margin: EdgeInsets.all(3),
-          /*decoration: BoxDecoration(
-            border: Border.all(color: Colors.black),
-            borderRadius: BorderRadius.circular(4),
-          ),*/
-          child: Text(
-            cell,
-            style: TextStyle(
-              color: Colors.amber,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+  Widget _buildUI() {
+    List<Widget> rows = [];
+    for (int i = 0; i < grid.length; i++) {
+      List<Widget> cells = [];
+      for (int j = 0; j < grid[i].length; j++) {
+        String letterKey = "$i-$j";
+
+        cells.add(
+          GestureDetector(
+            onPanStart: (details) => _highlightCell(i, j),
+            onPanUpdate: (details) => _highlightCell(i, j),
+            onPanEnd: (details) => _uncolorCell(i, j),
+            child: Container(
+              alignment: Alignment.center,
+              width: 27,
+              height: 27,
+              margin: EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: highlightStatus[letterKey] == true
+                    ? Colors.blue[200]
+                    : Colors.transparent,
+                /*
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(4),
+                  */
+              ),
+              child: Text(
+                grid[i][j],
+                style: TextStyle(
+                  color: Colors.amber,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
+        );
+      }
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: cells,
         ),
       );
     }
-    rows.add(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: cells,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Container(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: rows,
+        ),
       ),
     );
   }
-  return Scaffold(
-    backgroundColor: Colors.black,
-    body: Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: rows,
-      ),
-    ),
-  );
+
+  void _highlightCell(int row, int column) {
+    String letterKey = "$row-$column";
+
+    setState(() {
+      highlightStatus[letterKey] = true;
+    });
+  }
+
+  void _uncolorCell(int row, int column) {
+    String letterKey = "$row-$column";
+    setState(() {
+      highlightStatus[letterKey] = false;
+    });
+  }
 }
