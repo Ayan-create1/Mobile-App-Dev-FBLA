@@ -55,7 +55,6 @@ class _WordGridState extends State<WordSearchGame> {
       List<Widget> cells = [];
       for (int j = 0; j < grid[i].length; j++) {
         String letterKey = "$i-$j";
-
         cells.add(
           Container(
             alignment: Alignment.center,
@@ -92,7 +91,7 @@ class _WordGridState extends State<WordSearchGame> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: rows,
@@ -113,8 +112,8 @@ class _WordGridState extends State<WordSearchGame> {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
-    int row = (localPosition.dy / 27).floor();
-    int column = (localPosition.dx / 27).floor();
+    int row = ((localPosition.dy / 31).floor()) - 4;
+    int column = ((localPosition.dx / 31).floor()) - 1;
 
     if (row >= 0 && column >= 0 && row < rowL && column < colL) {
       String cellKey = "$row-$column";
