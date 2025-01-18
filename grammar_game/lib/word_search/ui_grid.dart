@@ -49,10 +49,10 @@ class _WordGridState extends State<WordSearchGame> {
       //*Body will define how the scaffold looks
       body: Center(
         child: GestureDetector(
-            onPanStart: _handlePanStart,
-            onPanUpdate: _handlePanUpdate,
-            onPanEnd: (_) => _resolveHighlights(),
-            child: _buildUI(),
+          onPanStart: _handlePanStart,
+          onPanUpdate: _handlePanUpdate,
+          onPanEnd: (_) => _resolveHighlights(),
+          child: _buildUI(),
         ),
       ),
     );
@@ -67,9 +67,9 @@ class _WordGridState extends State<WordSearchGame> {
         cells.add(
           Container(
             alignment: Alignment.center,
-            width: 27,
-            height: 27,
-            margin: EdgeInsets.all(3),
+            width: 38,
+            height: 38,
+            margin: EdgeInsets.all(1),
             decoration: BoxDecoration(
               color: highlightStatus[letterKey] == true
                   ? Colors.purple[300]
@@ -123,8 +123,8 @@ class _WordGridState extends State<WordSearchGame> {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
-    int row = ((localPosition.dy / 32).floor()) - 4;
-    int column = ((localPosition.dx / 32).floor()) - 1;
+    int row = ((localPosition.dy / 40).floor()) - 3;
+    int column = ((localPosition.dx / 40).floor());
 
     if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
       String cellKey = "$row-$column";
