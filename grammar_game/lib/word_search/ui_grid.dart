@@ -29,6 +29,8 @@ class _WordGridState extends State<WordSearchGame> {
   final int rowL = 9;
   final int colL = 9;
 
+  int? previousRow;
+  int? previousColumn;
   @override
   Widget build(BuildContext context) {
     //*Scaffold will define new page in application
@@ -179,15 +181,27 @@ class _WordGridState extends State<WordSearchGame> {
 
     if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
       String cellKey = "$row-$column";
+      if (previousRow == null && previousColumn == null) {
+        previousRow = row;
+        previousColumn = column;
+      }
 
+      if (previousRow != null && previousColumn != null) {
+        if (row != previousRow && column != previousColumn) {
+          return;
+        }
+      }
       setState(() {
         highlightStatus[cellKey] = true;
       });
+
       if (oRow != row || oCol != column) {
         highlightedWords.add(grid[row][column]);
         oRow = row;
         oCol = column;
       }
+      previousRow = row;
+      previousColumn = column;
     }
   }
 
@@ -211,5 +225,7 @@ class _WordGridState extends State<WordSearchGame> {
       highlightStatus.clear();
     });
     highlightedWords.clear();
+    previousRow = null;
+    previousColumn = null;
   }
 }
