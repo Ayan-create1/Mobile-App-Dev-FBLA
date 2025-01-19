@@ -34,6 +34,7 @@ class _WordGridState extends State<WordSearchGame> {
     //*Scaffold will define new page in application
     //*Returns the entire project page
     return Scaffold(
+      backgroundColor: Colors.black,
       //*Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
         //*Will show title of screen and center that title
@@ -48,13 +49,65 @@ class _WordGridState extends State<WordSearchGame> {
       ),
       //*Body will define how the scaffold looks
       body: Center(
-        child: GestureDetector(
-          onPanStart: _handlePanStart,
-          onPanUpdate: _handlePanUpdate,
-          onPanEnd: (_) => _resolveHighlights(),
-          child: _buildUI(),
+        child: Column(
+          children: [
+            GestureDetector(
+              onPanStart: _handlePanStart,
+              onPanUpdate: _handlePanUpdate,
+              onPanEnd: (_) => _resolveHighlights(),
+              child: _buildUI(),
+            ),
+            _buildBank(),
+          ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBank() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.all(0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: hints
+                    .sublist(0, 5)
+                    .map((item) => Text(
+                          item,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ))
+                    .toList(),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: hints
+                    .sublist(5, 10)
+                    .map(
+                      (item) => Text(
+                        item,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -99,14 +152,12 @@ class _WordGridState extends State<WordSearchGame> {
         ),
       );
     }
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Container(
-        padding: const EdgeInsets.all(0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: rows,
-        ),
+
+    return Container(
+      padding: const EdgeInsets.all(0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: rows,
       ),
     );
   }

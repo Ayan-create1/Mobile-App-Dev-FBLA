@@ -19,17 +19,22 @@ List<List<String>> getWords() {
     'will-see': "future",
     'drank': "past",
     'could-work': "conditional",
+    'want': "present",
+    'ate': "past",
+    'watched': "past",
+    'write': "present",
+    'draw': "present",
   };
 
   List<String> keys = words.keys.toList();
   List<String> vals = words.values.toList();
 
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 10; i++) {
     int num = random.nextInt(keys.length);
     randKeys.add(keys[num]);
     randVals.add(vals[num]);
     keys.remove(keys[num]);
-    randVals.remove(vals[num]);
+    vals.remove(vals[num]);
   }
 
   return [randKeys, randVals];
