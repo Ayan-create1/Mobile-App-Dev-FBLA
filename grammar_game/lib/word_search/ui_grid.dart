@@ -13,6 +13,9 @@ String? currentcorrectWords;
 List<String> highlightedWords = [];
 int oRow = 0;
 int oCol = 0;
+bool isHorizontal = false;
+Offset previousLocalPosition = Offset.zero;
+Map<String, bool> wordStatus = {};
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -29,17 +32,18 @@ class _WordGridState extends State<WordSearchGame> {
   final int rowL = 9;
   final int colL = 9;
 
+  //Will allow previous row and colum to be null
   int? previousRow;
   int? previousColumn;
   @override
   Widget build(BuildContext context) {
-    //*Scaffold will define new page in application
-    //*Returns the entire project page
+    //Scaffold will define new page in application
+    //Returns the entire project page
     return Scaffold(
       backgroundColor: Colors.black,
-      //*Return the appbar with title center, title with special text, and background properties
+      //Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
-        //*Will show title of screen and center that title
+        //Will show title of screen and center that title
         centerTitle: true,
         title: Text(
           "SEARCH TENSE",
@@ -49,8 +53,9 @@ class _WordGridState extends State<WordSearchGame> {
         ),
         backgroundColor: Colors.black,
       ),
-      //*Body will define how the scaffold looks
+      //Body will define how the scaffold looks
       body: Center(
+        //Will make a column widget where buildUI has gesture detectors then wordbank under
         child: Column(
           children: [
             GestureDetector(
@@ -66,24 +71,33 @@ class _WordGridState extends State<WordSearchGame> {
     );
   }
 
+  //*Will build the word bank
   Widget _buildBank() {
     return Column(
+      //Will try to start this column at the end
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           padding: EdgeInsets.all(0),
+          //There will be a row widget inside this containter
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              //The column will be inside the row
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                //Is going to get value 0,5 from hints and put them in the column
                 children: hints
                     .sublist(0, 5)
                     .map((item) => Text(
                           item,
                           style: TextStyle(
-                            color: Colors.white,
+                            //if wordStatus of the word is true, color will be green else white
+                            //!Problem could be not adding anything to show item is true
+                            color: wordStatus[item] == true
+                                ? Colors.green
+                                : Colors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
@@ -98,7 +112,9 @@ class _WordGridState extends State<WordSearchGame> {
                       (item) => Text(
                         item,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: wordStatus[item] == true
+                              ? Colors.green
+                              : Colors.white,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -114,10 +130,14 @@ class _WordGridState extends State<WordSearchGame> {
   }
 
   Widget _buildUI() {
+    //Will contain all of the row widgets
     List<Widget> rows = [];
+    //Will add each row individually to cells
     for (int i = 0; i < grid.length; i++) {
       List<Widget> cells = [];
       for (int j = 0; j < grid[i].length; j++) {
+        //! Important
+        //We are adding a letterKey to idenitify each of the containers
         String letterKey = "$i-$j";
         cells.add(
           Container(
@@ -126,6 +146,7 @@ class _WordGridState extends State<WordSearchGame> {
             height: 34,
             margin: EdgeInsets.all(1),
             decoration: BoxDecoration(
+              //If containter is touched, make it purple, else if correctly highlighted, make green, else keep trans
               color: highlightStatus[letterKey] == true
                   ? Colors.purple[300]
                   : correctWords[letterKey] == true
@@ -155,6 +176,7 @@ class _WordGridState extends State<WordSearchGame> {
       );
     }
 
+    //Will return a container of row widgets
     return Container(
       padding: const EdgeInsets.all(0),
       child: Column(
@@ -164,68 +186,109 @@ class _WordGridState extends State<WordSearchGame> {
     );
   }
 
+  //Wbhen PanStarts, will go to handle drag
   void _handlePanStart(DragStartDetails details) {
     _handleDrag(details.globalPosition);
   }
 
+  //When PanUpdates, will go to handle drag
   void _handlePanUpdate(DragUpdateDetails details) {
     _handleDrag(details.globalPosition);
   }
 
+  //Will handle all drag related motions
   void _handleDrag(Offset globalPosition) {
+
+    //Will make the grid a local position on the phone. That will be converted to a local position for Pan features
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
+    //Will get the position of the x and y for the column and row
     int row = ((localPosition.dy / 36).floor()) - 3;
     int column = ((localPosition.dx / 36).floor());
 
+    //checks that row and column are within bounds
     if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
+      //Makes this cellKey showing current row and column
+      //! Important for text change color
       String cellKey = "$row-$column";
+
+      //*Attempts to only allow certain swipe direction
+      /*
       if (previousRow == null && previousColumn == null) {
         previousRow = row;
         previousColumn = column;
       }
 
       if (previousRow != null && previousColumn != null) {
-        if (row != previousRow && column != previousColumn) {
+        double deltaX = localPosition.dx - previousLocalPosition.dx;
+        double deltaY = localPosition.dy - previousLocalPosition.dy;
+
+        if (deltaX.abs() > deltaY.abs()) {
+          isHorizontal = true;
+        }
+        // If the movement is primarily vertical
+        else if (deltaY.abs() > deltaX.abs()) {
+          isHorizontal = false;
+        }
+
+        if (isHorizontal && row != previousRow) {
+          return;
+        }
+        if (!isHorizontal && column != previousColumn) {
           return;
         }
       }
+      */
+
+      //if our row and column are valid, our cellKey status will be set to true
       setState(() {
         highlightStatus[cellKey] = true;
       });
 
+      //Prevents double highlighting
       if (oRow != row || oCol != column) {
         highlightedWords.add(grid[row][column]);
         oRow = row;
         oCol = column;
       }
+      /*
       previousRow = row;
       previousColumn = column;
+      previousLocalPosition = localPosition;
+      */
     }
   }
 
   void _resolveHighlights() {
     bool status = false;
-
+    //Will check if final result is matching in word bank
     String checkWord = highlightedWords.join('');
     for (int i = 0; i < words.length; i++) {
       if (words[i] == checkWord) {
         status = true;
         if (status == true) {
           correctWords.addAll(highlightStatus);
+          if (status) {
+            setState(() {
+              wordStatus[words[i]] = true;
+            });
+          }
         }
         break;
       }
     }
     print("$words");
     print("$highlightedWords-$checkWord-$status");
-
+    
+    //Will clear highlightStatus and highlightedWords
     setState(() {
       highlightStatus.clear();
     });
     highlightedWords.clear();
-    previousRow = null;
-    previousColumn = null;
+    /*
+      previousRow = null;
+      previousColumn = null;
+    */
   }
 }
