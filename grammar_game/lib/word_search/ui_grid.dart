@@ -120,8 +120,8 @@ class _WordGridState extends State<WordSearchGame> {
         cells.add(
           Container(
             alignment: Alignment.center,
-            width: 38,
-            height: 38,
+            width: 34,
+            height: 34,
             margin: EdgeInsets.all(1),
             decoration: BoxDecoration(
               color: highlightStatus[letterKey] == true
@@ -174,8 +174,8 @@ class _WordGridState extends State<WordSearchGame> {
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
-    int row = ((localPosition.dy / 40).floor()) - 3;
-    int column = ((localPosition.dx / 40).floor());
+    int row = ((localPosition.dy / 36).floor()) - 3;
+    int column = ((localPosition.dx / 36).floor());
 
     if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
       String cellKey = "$row-$column";
