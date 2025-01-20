@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'word_search/ui_grid.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
+//import 'pages/word_search/ui_grid.dart';
 //! Implement a feature that only allows horizontal or vertical path
 //! Implement a word box to fill bottom half of screen
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: WordSearchGame(),
+      home: HomePage(),
     );
   }
 }
