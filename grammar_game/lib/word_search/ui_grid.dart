@@ -64,10 +64,19 @@ class _WordGridState extends State<WordSearchGame> {
               onPanEnd: (_) => _resolveHighlights(),
               child: _buildUI(),
             ),
+            _emptyContainter(),
             _buildBank(),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _emptyContainter() {
+    return Container(
+      height: 50.0,
+      width: MediaQuery.of(context).size.width,
+      color: Colors.transparent,
     );
   }
 
