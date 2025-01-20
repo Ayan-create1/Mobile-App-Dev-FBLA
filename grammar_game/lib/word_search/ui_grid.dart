@@ -16,6 +16,7 @@ int oCol = 0;
 bool isHorizontal = false;
 Offset previousLocalPosition = Offset.zero;
 Map<String, bool> wordStatus = {};
+List<String> counter = [];
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -280,10 +281,12 @@ class _WordGridState extends State<WordSearchGame> {
           setState(() {
             wordStatus[hints[i]] = true;
           });
+          counter.add(checkWord);
         }
         break;
       }
     }
+
     print("$words");
     print("$highlightedWords-$checkWord-$status");
     print("$wordStatus");
@@ -292,9 +295,29 @@ class _WordGridState extends State<WordSearchGame> {
       highlightStatus.clear();
     });
     highlightedWords.clear();
+
+    if (counter.length == 10) {
+      _resetWordSearch();
+    }
+
     /*
       previousRow = null;
       previousColumn = null;
     */
+  }
+
+  void _resetWordSearch() {
+    setState(() {
+      wordStatus.clear();
+      correctWords.clear();
+      highlightStatus.clear();
+      highlightedWords.clear();
+      counter.clear();
+
+      myDict = getWords();
+      words = myDict[0];
+      hints = myDict[1];
+      grid = test(words);
+    });
   }
 }
