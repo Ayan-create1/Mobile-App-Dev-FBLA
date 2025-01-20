@@ -12,18 +12,18 @@ List<List<String>> getWords() {
   List<String> randVals = [];
 
   Map<String, String> words = {
-    'run': "present",
-    'fought': "past",
-    'saw': "present",
-    'will-go': "future",
-    'will-see': "future",
-    'drank': "past",
-    'could-work': "conditional",
-    'want': "present",
-    'ate': "past",
-    'watched': "past",
-    'write': "present",
-    'draw': "present",
+    'run': "to run - present",
+    'fought': "to fight - past",
+    'saw': "to see - present",
+    'will-go': "to go - future",
+    'will-see': "to see - future",
+    'drank': "to drink - past",
+    'could-work': "to work - conditional",
+    'want': "to want - present",
+    'ate': "to eat - past",
+    'watched': "to watch - past",
+    'write': "to write - present",
+    'draw': "to draw - present",
   };
 
   List<String> keys = words.keys.toList();

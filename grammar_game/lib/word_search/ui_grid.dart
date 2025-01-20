@@ -98,7 +98,7 @@ class _WordGridState extends State<WordSearchGame> {
                             color: wordStatus[item] == true
                                 ? Colors.green
                                 : Colors.white,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ))
@@ -115,7 +115,7 @@ class _WordGridState extends State<WordSearchGame> {
                           color: wordStatus[item] == true
                               ? Colors.green
                               : Colors.white,
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -198,7 +198,6 @@ class _WordGridState extends State<WordSearchGame> {
 
   //Will handle all drag related motions
   void _handleDrag(Offset globalPosition) {
-
     //Will make the grid a local position on the phone. That will be converted to a local position for Pan features
     final RenderBox gridBox = context.findRenderObject() as RenderBox;
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
@@ -269,18 +268,16 @@ class _WordGridState extends State<WordSearchGame> {
         status = true;
         if (status == true) {
           correctWords.addAll(highlightStatus);
-          if (status) {
-            setState(() {
-              wordStatus[words[i]] = true;
-            });
-          }
+          setState(() {
+            wordStatus[hints[i]] = true;
+          });
         }
         break;
       }
     }
     print("$words");
     print("$highlightedWords-$checkWord-$status");
-    
+    print("$wordStatus");
     //Will clear highlightStatus and highlightedWords
     setState(() {
       highlightStatus.clear();
