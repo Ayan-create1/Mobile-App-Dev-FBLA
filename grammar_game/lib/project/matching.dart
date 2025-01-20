@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 void main() {
   runApp(DragAndDropGame());
@@ -24,10 +25,33 @@ class DragAndDropGameScreen extends StatefulWidget {
 }
 
 class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
-  List<String> questions = ['Complete the sentence: The sky is _____.'];
-  List<String> answers = ['blue', 'green', 'red', 'yellow'];
-  String correctAnswer = 'blue';
+  List<Map<String, dynamic>> questions = [
+    {
+      'question': 'Complete the sentence: The sky is _____.',
+      'answers': ['blue', 'green', 'red', 'yellow'],
+      'correctAnswer': 'blue'
+    },
+    {
+      'question': 'Complete the sentence: Grass is _____.',
+      'answers': ['blue', 'green', 'red', 'yellow'],
+      'correctAnswer': 'green'
+    },
+    {
+      'question': 'Complete the sentence: Roses are _____.',
+      'answers': ['blue', 'green', 'red', 'yellow'],
+      'correctAnswer': 'red'
+    },
+  ];
+
+  List<Map<String, dynamic>> incorrectQuestions = [];
+  int currentQuestionIndex = 0;
   String userAnswer = '';
+
+  @override
+  void initState() {
+    super.initState();
+    questions.shuffle(); // Shuffle the questions to appear in random order
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +60,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            questions[0],
+            questions[currentQuestionIndex]['question'],
             style: TextStyle(fontSize: 18),
           ),
         ),
@@ -63,7 +87,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         SizedBox(height: 20),
         Wrap(
           spacing: 10,
-          children: answers.map((answer) {
+          children: questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
             return Draggable<String>(
               data: answer,
               child: AnswerBox(answer: answer),
@@ -84,17 +108,48 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   }
 
   void _checkAnswer() {
-    bool isCorrect = userAnswer == correctAnswer;
+    bool isCorrect = userAnswer == questions[currentQuestionIndex]['correctAnswer'];
+    if (!isCorrect) {
+      incorrectQuestions.add(questions[currentQuestionIndex]);
+    }
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: Text(isCorrect ? 'Correct!' : 'Try Again!'),
         content: Text(isCorrect
             ? 'You got the right answer.'
-            : 'The correct answer is "$correctAnswer".'),
+            : 'The correct answer is "${questions[currentQuestionIndex]['correctAnswer']}".'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                if (currentQuestionIndex < questions.length - 1) {
+                  currentQuestionIndex++;
+                  userAnswer = '';
+                } else if (incorrectQuestions.isNotEmpty) {
+                  questions = incorrectQuestions;
+                  incorrectQuestions = [];
+                  currentQuestionIndex = 0;
+                  userAnswer = '';
+                } else {
+                  // All questions answered
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Congratulations!'),
+                      content: Text('You have completed all the questions.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              });
+            },
             child: Text('OK'),
           ),
         ],
