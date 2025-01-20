@@ -14,7 +14,7 @@ List<List<String>> getWords() {
   Map<String, String> words = {
     'run': "to run - present",
     'fought': "to fight - past",
-    'saw': "to see - present",
+    'saw': "to see - past",
     'will-go': "to go - future",
     'will-see': "to see - future",
     'drank': "to drink - past",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'word_grid.dart';
+import 'pop_up.dart';
 //import 'dart:async';
 
 Map<String, bool> highlightStatus = {};
@@ -214,7 +215,7 @@ class _WordGridState extends State<WordSearchGame> {
 
     //Will get the position of the x and y for the column and row
     int row = ((localPosition.dy / 36).floor()) - 3;
-    int column = ((localPosition.dx / 36).floor());
+    int column = ((localPosition.dx / 36).floor()) - 1;
 
     //checks that row and column are within bounds
     if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
@@ -298,6 +299,7 @@ class _WordGridState extends State<WordSearchGame> {
 
     if (counter.length == 10) {
       _resetWordSearch();
+      showPopup(context);
     }
 
     /*
