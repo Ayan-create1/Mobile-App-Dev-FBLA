@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../home_page/home_page.dart';
 
 //! Implement navigation to home page
 
@@ -30,7 +31,12 @@ void showPopup(BuildContext context) {
                           height: 50,
                           child: TextButton(
                             onPressed: () {
-                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ),
+                              );
                             },
                             child: Text("Home"),
                           ),
