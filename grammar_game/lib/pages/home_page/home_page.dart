@@ -8,34 +8,53 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text("Home Page"),
         centerTitle: true,
+        backgroundColor: Colors.black,
       ),
       body: Center(
-        child: Column(
+        child: Stack(
           children: [
-            ElevatedButton(
-              child: Text("Go to Word Search"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WordSearchGame(),
-                  ),
-                );
-              },
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Image.asset(
+                'assets/sun.png',
+                width: 150,
+                height: 150,
+              ),
             ),
-            ElevatedButton(
-              child: Text("Go to Drag and Drop"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DragAndDropGame(),
-                  ),
-                );
-              },
+            Positioned(
+              top: 200,
+              right: MediaQuery.of(context).size.width / 2 - 90,
+              child: ElevatedButton(
+                child: Text("Go to Word Search"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => WordSearchGame(),
+                    ),
+                  );
+                },
+              ),
+            ),
+            Positioned(
+              top: 550,
+              right: MediaQuery.of(context).size.width / 2 - 90,
+              child: ElevatedButton(
+                child: Text("Go to Drag and Drop"),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DragAndDropGame(),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),

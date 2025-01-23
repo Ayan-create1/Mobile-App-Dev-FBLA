@@ -3,7 +3,6 @@ import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
 //import 'dart:async';
-
 Map<String, bool> highlightStatus = {};
 Map<String, bool> correctWords = {};
 List<List<String>> myDict = getWords();
