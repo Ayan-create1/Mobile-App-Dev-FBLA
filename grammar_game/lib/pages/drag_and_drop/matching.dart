@@ -25,14 +25,14 @@ class DragAndDropGameScreen extends StatefulWidget {
 class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   List<Map<String, dynamic>> questions = [
     {
-      'question': 'Complete the sentence: The sky is _____.',
-      'answers': ['blue', 'green', 'red', 'yellow'],
-      'correctAnswer': 'blue'
+      'question': 'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
+      'answers': [';', '.', ':', 'No change'],
+      'correctAnswer': ';'
     },
     {
-      'question': 'Complete the sentence: Grass is _____.',
-      'answers': ['blue', 'green', 'red', 'yellow'],
-      'correctAnswer': 'green'
+      'question': 'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
+      'answers': [';', '.', ',', '-'],
+      'correctAnswer': ','
     },
     {
       'question': 'Complete the sentence: Roses are _____.',
