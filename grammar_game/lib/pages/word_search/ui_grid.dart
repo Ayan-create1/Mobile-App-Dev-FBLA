@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
 //import 'dart:async';
-
 Map<String, bool> highlightStatus = {};
 Map<String, bool> correctWords = {};
 List<List<String>> myDict = getWords();
@@ -45,6 +45,22 @@ class _WordGridState extends State<WordSearchGame> {
       backgroundColor: Colors.black,
       //Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.blue,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              })
+        ],
         //Will show title of screen and center that title
         centerTitle: true,
         title: Text(

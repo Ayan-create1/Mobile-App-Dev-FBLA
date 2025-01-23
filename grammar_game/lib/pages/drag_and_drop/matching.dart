@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
-
+import 'package:grammar_game/pages/home_page/home_page.dart';
 
 class DragAndDropGame extends StatelessWidget {
   @override
@@ -9,6 +8,22 @@ class DragAndDropGame extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.home),
+                color: Colors.black,
+                splashRadius: 50.0,
+                splashColor: Colors.blue,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ),
+                  );
+                })
+          ],
           title: Text('Drag and Drop Game'),
         ),
         body: DragAndDropGameScreen(),
@@ -85,7 +100,8 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         SizedBox(height: 20),
         Wrap(
           spacing: 10,
-          children: questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
+          children:
+              questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
             return Draggable<String>(
               data: answer,
               child: AnswerBox(answer: answer),
@@ -106,7 +122,8 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   }
 
   void _checkAnswer() {
-    bool isCorrect = userAnswer == questions[currentQuestionIndex]['correctAnswer'];
+    bool isCorrect =
+        userAnswer == questions[currentQuestionIndex]['correctAnswer'];
     if (!isCorrect) {
       incorrectQuestions.add(questions[currentQuestionIndex]);
     }
