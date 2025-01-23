@@ -12,10 +12,16 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("Home Page"),
         centerTitle: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.transparent,
       ),
       body: Stack(
         children: [
+          Positioned.fill(
+            child: Image.asset(
+              'assets/galaxy.png', // Your background image
+              fit: BoxFit.cover, // Make sure the image covers the screen
+            ),
+          ),
           Center(
             child: Image.asset(
               'assets/Sun_Edited (1).png',
