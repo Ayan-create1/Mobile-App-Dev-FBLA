@@ -14,52 +14,76 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.black,
       ),
-      body: Center(
-        child: Stack(
-          children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
+      body: Stack(
+        children: [
+          Center(
+            child: Image.asset(
+              'assets/Sun_Edited (1).png',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          Positioned(
+            top: 190,
+            left: 1,
+            child: Image.asset(
+              'assets/Saturn.png',
+              width: 170,
+              height: 170,
+            ),
+          ),
+          Positioned(
+            top: 160,
+            left: 170,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        WordSearchGame(), // Replace with your desired page
+                  ),
+                );
+              },
               child: Image.asset(
-                'assets/sun.png',
-                width: 150,
-                height: 150,
+                'assets/Uranian Search.png',
+                width: 120,
+                height: 120,
               ),
             ),
-            Positioned(
-              top: 200,
-              right: MediaQuery.of(context).size.width / 2 - 90,
-              child: ElevatedButton(
-                child: Text("Go to Word Search"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => WordSearchGame(),
-                    ),
-                  );
-                },
-              ),
+          ),
+          Positioned(
+            top: 20,
+            right: MediaQuery.of(context).size.width / 2 - 90,
+            child: ElevatedButton(
+              child: Text("Go to Word Search"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WordSearchGame(),
+                  ),
+                );
+              },
             ),
-            Positioned(
-              top: 550,
-              right: MediaQuery.of(context).size.width / 2 - 90,
-              child: ElevatedButton(
-                child: Text("Go to Drag and Drop"),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DragAndDropGame(),
-                    ),
-                  );
-                },
-              ),
+          ),
+          Positioned(
+            top: 70,
+            right: MediaQuery.of(context).size.width / 2 - 90,
+            child: ElevatedButton(
+              child: Text("Go to Drag and Drop"),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DragAndDropGame(),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
-
