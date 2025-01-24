@@ -7,6 +7,10 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> spaceGradient = [
+      Colors.grey,
+      Colors.indigo[900]!,
+    ];
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -17,9 +21,13 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(
-            child: Image.asset(
-              'assets/galaxy.png', // Your background image
-              fit: BoxFit.cover, // Make sure the image covers the screen
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: spaceGradient,
+                  radius: 1,
+                ),
+              ),
             ),
           ),
           Center(
