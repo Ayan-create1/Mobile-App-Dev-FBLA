@@ -1,6 +1,26 @@
 import 'package:flutter/material.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
+import 'dart:math';
+
+class StarPainter extends CustomPainter {
+  final Random random = Random();
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // ignore: deprecated_member_use
+    final paint = Paint()..color = Colors.white.withOpacity(0.7);
+    for (int i = 0; i < 200; i++) {
+      final dx = random.nextDouble() * size.width;
+      final dy = random.nextDouble() * size.height;
+      final radius = random.nextDouble() * 2;
+      canvas.drawCircle(Offset(dx, dy), radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,11 +28,13 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Color> spaceGradient = [
-      Colors.grey,
-      Colors.indigo[900]!,
+      Colors.amber[400]!,
+
+      //Colors.deepOrange[800]!,
+      Colors.black,
     ];
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: Text("Home Page"),
         centerTitle: true,
@@ -25,10 +47,14 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 gradient: RadialGradient(
                   colors: spaceGradient,
-                  radius: 1,
+                  radius: 0.3,
                 ),
               ),
             ),
+          ),
+          CustomPaint(
+            size: Size.infinite,
+            painter: StarPainter(),
           ),
           Center(
             child: Image.asset(
