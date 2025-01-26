@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
+//import 'package:shimmer/shimmer.dart';
 
 class StarPainter extends CustomPainter {
   final Random random = Random();
@@ -64,17 +65,17 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 190,
-            left: 1,
+            top: 100,
+            left: 120,
             child: Image.asset(
               'assets/Saturn.png',
-              width: 170,
-              height: 170,
+              width: 200,
+              height: 200,
             ),
           ),
           Positioned(
-            top: 160,
-            left: 170,
+            top: 200,
+            right: 30,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -87,8 +88,28 @@ class HomePage extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/Uranian Search.png',
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 190,
+            left: 1,
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DragAndDropGame(), // Replace with your desired page
+                  ),
+                );
+              },
+              child: Image.asset(
+                'assets/Jupiter.png',
+                width: 130,
+                height: 130,
               ),
             ),
           ),
