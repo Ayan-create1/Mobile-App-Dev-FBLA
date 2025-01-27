@@ -53,10 +53,14 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+
+          //*Paints the Stars
           CustomPaint(
             size: Size.infinite,
             painter: StarPainter(),
           ),
+
+          //*Shows Sun
           Center(
             child: Image.asset(
               'assets/Sun_Edited (1).png',
@@ -64,18 +68,77 @@ class HomePage extends StatelessWidget {
               height: 200,
             ),
           ),
+
+          //*Shows Saturn - Faded
           Positioned(
-            top: 100,
-            left: 120,
+            top: 220,
+            left: 70,
             child: Image.asset(
               'assets/Saturn.png',
-              width: 200,
-              height: 200,
+              width: 150,
+              height: 150,
             ),
           ),
+
+          //*Shows Earth - faded
           Positioned(
-            top: 200,
-            right: 30,
+            top: 540,
+            left: 140,
+            child: Image.asset(
+              'assets/Earth.png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+
+          //*Shows Mars - faded
+          Positioned(
+            top: 460,
+            left: 30,
+            child: Image.asset(
+              'assets/Mars.png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+
+          //*Shows Neptune - faded
+          Positioned(
+            top: 310,
+            right: 40,
+            child: Image.asset(
+              'assets/Neptune (1).png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+
+          //*Shows Mercury - faded
+          Positioned(
+            top: 400,
+            right: 10,
+            child: Image.asset(
+              'assets/Mercury (1).png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+
+          //*Shows Venus - faded
+          Positioned(
+            top: 480,
+            right: 60,
+            child: Image.asset(
+              'assets/Venus (1).png',
+              width: 100,
+              height: 100,
+            ),
+          ),
+
+          //*Shows Uranus Real
+          Positioned(
+            top: 250,
+            right: 110,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -93,9 +156,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+
+          //*Shows Jupiter - Real
           Positioned(
-            top: 190,
-            left: 1,
+            top: 340,
+            left: 10,
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -108,8 +173,8 @@ class HomePage extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/Jupiter.png',
-                width: 130,
-                height: 130,
+                width: 110,
+                height: 110,
               ),
             ),
           ),

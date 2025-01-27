@@ -24,7 +24,7 @@ class DragAndDropGame extends StatelessWidget {
                   );
                 })
           ],
-          title: Text('Drag and Drop Game'),
+          title: Text('Gravity Drop'),
         ),
         body: DragAndDropGameScreen(),
       ),
