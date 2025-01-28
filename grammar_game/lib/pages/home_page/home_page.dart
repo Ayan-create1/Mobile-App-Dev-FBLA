@@ -69,10 +69,22 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          //*Space Words Text
+          Positioned(
+            child: SizedBox(
+              height: 180.0,
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset(
+                'assets/Space Text (2).png',
+                fit: BoxFit.fitHeight,
+              ),
+            ),
+          ),
+
           //*Shows Saturn - Faded
           Positioned(
-            top: 220,
-            left: 70,
+            top: 190,
+            left: 50,
             child: Image.asset(
               'assets/Saturn.png',
               width: 150,
@@ -82,7 +94,7 @@ class HomePage extends StatelessWidget {
 
           //*Shows Earth - faded
           Positioned(
-            top: 540,
+            top: 500,
             left: 140,
             child: Image.asset(
               'assets/Earth.png',
@@ -104,8 +116,8 @@ class HomePage extends StatelessWidget {
 
           //*Shows Neptune - faded
           Positioned(
-            top: 310,
-            right: 40,
+            top: 290,
+            right: 30,
             child: Image.asset(
               'assets/Neptune (1).png',
               width: 100,
@@ -137,7 +149,7 @@ class HomePage extends StatelessWidget {
 
           //*Shows Uranus Real
           Positioned(
-            top: 250,
+            top: 200,
             right: 110,
             child: InkWell(
               onTap: () {
@@ -178,6 +190,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
+          /*
           Positioned(
             top: 20,
             right: MediaQuery.of(context).size.width / 2 - 90,
@@ -193,6 +206,7 @@ class HomePage extends StatelessWidget {
               },
             ),
           ),
+          
           Positioned(
             top: 70,
             right: MediaQuery.of(context).size.width / 2 - 90,
@@ -208,6 +222,7 @@ class HomePage extends StatelessWidget {
               },
             ),
           ),
+          */
         ],
       ),
     );
