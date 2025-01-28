@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../home_page/home_page.dart';
 
 //!Start on login page not home page
 void main() {
@@ -9,12 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: LPage(),
     );
   }
 }
 
-class HomePage extends StatelessWidget {
+class LPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,9 +131,15 @@ class _LoginPageState extends State<LoginPage> {
 
     // Validate the credentials
     if (_validateCredentials(username, password)) {
-      setState(() {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+      /*setState(() {
         _errorMessage = 'Login successful!';
-      });
+      });*/
     } else {
       setState(() {
         _errorMessage = 'Invalid username or password';
@@ -178,7 +185,10 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20),
             Text(
               _errorMessage,
-              style: TextStyle(color: _errorMessage == 'Login successful!' ? Colors.green : Colors.red),
+              style: TextStyle(
+                  color: _errorMessage == 'Login successful!'
+                      ? Colors.green
+                      : Colors.red),
             ),
           ],
         ),
