@@ -64,7 +64,7 @@ class _WordGridState extends State<WordSearchGame> {
         //Will show title of screen and center that title
         centerTitle: true,
         title: Text(
-          "SEARCH TENSE",
+          "URANIAN SEARCH",
           style: TextStyle(
             color: Colors.white,
           ),
