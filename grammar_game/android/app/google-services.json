@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "311016588686",
+    "project_id": "fbla-1b624",
+    "storage_bucket": "fbla-1b624.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311016588686:android:ca67dfad2c72fcb9b110df",
+        "android_client_info": {
+          "package_name": "com.yourwebsite.grammar_game"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpBKWeLeaPie6BS5s9JE72WdgQbqquWZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

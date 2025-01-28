@@ -39,22 +39,38 @@ class DragAndDropGameScreen extends StatefulWidget {
 
 class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   List<Map<String, dynamic>> questions = [
-    {
-      'question': 'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
-      'answers': [';', '.', ':', 'No change'],
-      'correctAnswer': ';'
-    },
-    {
-      'question': 'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
-      'answers': [';', '.', ',', '-'],
-      'correctAnswer': ','
-    },
-    {
-      'question': 'Complete the sentence: Roses are _____.',
-      'answers': ['blue', 'green', 'red', 'yellow'],
-      'correctAnswer': 'red'
-    },
-  ];
+  {
+    'question': 'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
+    'answers': [';', '.', ':', 'No change'],
+    'correctAnswer': ';'
+  },
+  {
+    'question': 'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
+    'answers': [';', '.', ',', '-'],
+    'correctAnswer': ','
+  },
+  {
+    'question': 'Fill in the blank with the correct punctuation: Bats are nocturnal creatures_ they come out only during the night.',
+    'answers': [',', '.', ':', ';'],
+    'correctAnswer': ';'
+  },
+  {
+    'question': 'Fill in the blank with the correct punctuation: When I turn 16_ I\'m going to buy a car.',
+    'answers': ['No change', ';', '-', ','],
+    'correctAnswer': ','
+  },
+  {
+    'question': 'Fill in the blanks with the correct punctuation: After college, James had three options: get a job_ apply to graduate school_ or become a criminal.',
+    'answers': [',', '-', ':', 'No change'],
+    'correctAnswer': ','
+  },
+  {
+    'question': 'Fill in the blanks with the correct punctuation: The homerun ball smashed through_the neighbor\'s window_and rolled into the living room.',
+    'answers': [',', '()', ':', '-'],
+    'correctAnswer': '-'
+  },
+];
+
 
   List<Map<String, dynamic>> incorrectQuestions = [];
   int currentQuestionIndex = 0;
