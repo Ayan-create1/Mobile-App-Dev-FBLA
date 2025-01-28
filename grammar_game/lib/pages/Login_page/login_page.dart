@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//!Start on login page not home page
 void main() {
   runApp(MyApp());
 }
