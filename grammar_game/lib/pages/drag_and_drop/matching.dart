@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
+import 'jupiter.dart';
 
 class DragAndDropGame extends StatelessWidget {
   @override
@@ -17,10 +18,10 @@ class DragAndDropGame extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.blue[900],
+          backgroundColor: Colors.orange[900],
         ),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.blue[300], // You can customize the color here
+          color: Colors.orange[300], // You can customize the color here
           child: Row(
             mainAxisAlignment:
                 MainAxisAlignment.center, // Center the button, adjust if needed
@@ -73,7 +74,14 @@ class DragAndDropGame extends StatelessWidget {
             ],
           ),
         ),
-        body: DragAndDropGameScreen(),
+        body: Center(
+          child: Stack(children: [
+            Positioned.fill(
+              child: LightningEffectPage(),
+            ),
+            DragAndDropGameScreen(),
+          ]),
+        ),
       ),
     );
   }
