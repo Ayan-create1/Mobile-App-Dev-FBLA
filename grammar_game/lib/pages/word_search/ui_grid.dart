@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
+import 'uranus.dart';
+
 //import 'dart:async';
 Map<String, bool> highlightStatus = {};
 Map<String, bool> correctWords = {};
@@ -45,6 +47,8 @@ class _WordGridState extends State<WordSearchGame> {
       backgroundColor: Colors.black,
       //Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
+        shadowColor: Colors.blueAccent,
+
         actions: [
           IconButton(
               icon: Icon(Icons.home),
@@ -69,21 +73,29 @@ class _WordGridState extends State<WordSearchGame> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.black,
+
+        backgroundColor: Colors.purple[900],
       ),
       //Body will define how the scaffold looks
       body: Center(
         //Will make a column widget where buildUI has gesture detectors then wordbank under
-        child: Column(
+        child: Stack(
           children: [
-            GestureDetector(
-              onPanStart: _handlePanStart,
-              onPanUpdate: _handlePanUpdate,
-              onPanEnd: (_) => _resolveHighlights(),
-              child: _buildUI(),
+            Positioned.fill(
+              child: auroras(),
             ),
-            _emptyContainter(),
-            _buildBank(),
+            Column(
+              children: [
+                GestureDetector(
+                  onPanStart: _handlePanStart,
+                  onPanUpdate: _handlePanUpdate,
+                  onPanEnd: (_) => _resolveHighlights(),
+                  child: _buildUI(),
+                ),
+                _emptyContainter(),
+                _buildBank(),
+              ],
+            ),
           ],
         ),
       ),
