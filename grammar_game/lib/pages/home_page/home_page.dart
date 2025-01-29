@@ -69,6 +69,24 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                icon: Icon(Icons.info),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(), // Your HomePage widget
+                    ),
+                  );
+                },
+              )),
           //*Space Words Text
           Positioned(
             child: SizedBox(
