@@ -44,7 +44,7 @@ class _WordGridState extends State<WordSearchGame> {
     //Scaffold will define new page in application
     //Returns the entire project page
     return Scaffold(
-      backgroundColor: Colors.black,
+      //backgroundColor: Colors.black,
       //Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
         shadowColor: Colors.blueAccent,
@@ -74,7 +74,7 @@ class _WordGridState extends State<WordSearchGame> {
           ),
         ),
 
-        backgroundColor: Colors.purple[900],
+        backgroundColor: Colors.blue[900],
       ),
       //Body will define how the scaffold looks
       body: Center(
@@ -82,10 +82,11 @@ class _WordGridState extends State<WordSearchGame> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: auroras(),
+              child: AuroraEffect(),
             ),
             Column(
               children: [
+                _emptyContainter(),
                 GestureDetector(
                   onPanStart: _handlePanStart,
                   onPanUpdate: _handlePanUpdate,
