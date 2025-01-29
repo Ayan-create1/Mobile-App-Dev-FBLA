@@ -8,23 +8,70 @@ class DragAndDropGame extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          actions: [
-            IconButton(
-                icon: Icon(Icons.home),
-                color: Colors.black,
+          shadowColor: Colors.blueAccent,
+          //Will show title of screen and center that title
+          centerTitle: true,
+          title: Text(
+            "GRAVITY DROP",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.blue[900],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.blue[300], // You can customize the color here
+          child: Row(
+            mainAxisAlignment:
+                MainAxisAlignment.center, // Center the button, adjust if needed
+            children: [
+              IconButton(
+                icon: Icon(Icons.info),
+                color: Colors.white,
                 splashRadius: 50.0,
-                splashColor: Colors.blue,
+                splashColor: Colors.black,
                 iconSize: 50.0,
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => HomePage(), // Your HomePage widget
                     ),
                   );
-                })
-          ],
-          title: Text('Gravity Drop'),
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.home),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(), // Your HomePage widget
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.share),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(), // Your HomePage widget
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
         body: DragAndDropGameScreen(),
       ),
@@ -39,38 +86,43 @@ class DragAndDropGameScreen extends StatefulWidget {
 
 class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   List<Map<String, dynamic>> questions = [
-  {
-    'question': 'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
-    'answers': [';', '.', ':', 'No change'],
-    'correctAnswer': ';'
-  },
-  {
-    'question': 'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
-    'answers': [';', '.', ',', '-'],
-    'correctAnswer': ','
-  },
-  {
-    'question': 'Fill in the blank with the correct punctuation: Bats are nocturnal creatures_ they come out only during the night.',
-    'answers': [',', '.', ':', ';'],
-    'correctAnswer': ';'
-  },
-  {
-    'question': 'Fill in the blank with the correct punctuation: When I turn 16_ I\'m going to buy a car.',
-    'answers': ['No change', ';', '-', ','],
-    'correctAnswer': ','
-  },
-  {
-    'question': 'Fill in the blanks with the correct punctuation: After college, James had three options: get a job_ apply to graduate school_ or become a criminal.',
-    'answers': [',', '-', ':', 'No change'],
-    'correctAnswer': ','
-  },
-  {
-    'question': 'Fill in the blanks with the correct punctuation: The homerun ball smashed through_the neighbor\'s window_and rolled into the living room.',
-    'answers': [',', '()', ':', '-'],
-    'correctAnswer': '-'
-  },
-];
-
+    {
+      'question':
+          'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
+      'answers': [';', '.', ':', 'No change'],
+      'correctAnswer': ';'
+    },
+    {
+      'question':
+          'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
+      'answers': [';', '.', ',', '-'],
+      'correctAnswer': ','
+    },
+    {
+      'question':
+          'Fill in the blank with the correct punctuation: Bats are nocturnal creatures_ they come out only during the night.',
+      'answers': [',', '.', ':', ';'],
+      'correctAnswer': ';'
+    },
+    {
+      'question':
+          'Fill in the blank with the correct punctuation: When I turn 16_ I\'m going to buy a car.',
+      'answers': ['No change', ';', '-', ','],
+      'correctAnswer': ','
+    },
+    {
+      'question':
+          'Fill in the blanks with the correct punctuation: After college, James had three options: get a job_ apply to graduate school_ or become a criminal.',
+      'answers': [',', '-', ':', 'No change'],
+      'correctAnswer': ','
+    },
+    {
+      'question':
+          'Fill in the blanks with the correct punctuation: The homerun ball smashed through_the neighbor\'s window_and rolled into the living room.',
+      'answers': [',', '()', ':', '-'],
+      'correctAnswer': '-'
+    },
+  ];
 
   List<Map<String, dynamic>> incorrectQuestions = [];
   int currentQuestionIndex = 0;
