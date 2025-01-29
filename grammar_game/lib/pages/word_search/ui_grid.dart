@@ -48,23 +48,6 @@ class _WordGridState extends State<WordSearchGame> {
       //Return the appbar with title center, title with special text, and background properties
       appBar: AppBar(
         shadowColor: Colors.blueAccent,
-
-        actions: [
-          IconButton(
-              icon: Icon(Icons.home),
-              color: Colors.white,
-              splashRadius: 50.0,
-              splashColor: Colors.blue,
-              iconSize: 50.0,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ),
-                );
-              })
-        ],
         //Will show title of screen and center that title
         centerTitle: true,
         title: Text(
@@ -73,8 +56,61 @@ class _WordGridState extends State<WordSearchGame> {
             color: Colors.white,
           ),
         ),
-
         backgroundColor: Colors.blue[900],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue[300], // You can customize the color here
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center the button, adjust if needed
+          children: [
+            IconButton(
+              icon: Icon(Icons.info),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.share),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       //Body will define how the scaffold looks
       body: Center(
