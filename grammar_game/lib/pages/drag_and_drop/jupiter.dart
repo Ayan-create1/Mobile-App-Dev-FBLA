@@ -11,22 +11,28 @@ class LightningEffectPage extends StatefulWidget {
 class _LightningEffectPageState extends State<LightningEffectPage> {
   bool _isLightning = false;
   double _opacity = 1.0;
+  Timer? _timer; // Declare the Timer to be canceled later
 
   // Start the lightning effect periodically
   void _startLightningEffect() {
-    Timer.periodic(Duration(seconds: 5), (timer) {
-      setState(() {
-        _isLightning = true;
-        _opacity = 0.8; // Simulate a lightning flash
-      });
-
-      // Stop the lightning effect after 0.2 seconds
-      Future.delayed(Duration(milliseconds: 200), () {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      // Ensure that setState only occurs if the widget is still mounted
+      if (mounted) {
         setState(() {
-          _isLightning = false;
-          _opacity = 1.0; // Reset the opacity after the flash
+          _isLightning = true;
+          _opacity = 0.8; // Simulate a lightning flash
         });
-      });
+
+        // Stop the lightning effect after 0.2 seconds
+        Future.delayed(Duration(milliseconds: 200), () {
+          if (mounted) {
+            setState(() {
+              _isLightning = false;
+              _opacity = 1.0; // Reset the opacity after the flash
+            });
+          }
+        });
+      }
     });
   }
 
@@ -34,6 +40,13 @@ class _LightningEffectPageState extends State<LightningEffectPage> {
   void initState() {
     super.initState();
     _startLightningEffect();
+  }
+
+  @override
+  void dispose() {
+    // Cancel the timer to avoid any memory leaks or setState errors after disposal
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -65,8 +78,7 @@ class _LightningEffectPageState extends State<LightningEffectPage> {
           // Lightning Overlay Effect
           AnimatedOpacity(
             duration: Duration(milliseconds: 200), // Flash lasts for 200ms
-            opacity:
-                _isLightning ? 0.8 : 0.0, // Flash opacity when lightning occurs
+            opacity: _isLightning ? 0.8 : 0.0, // Flash opacity when lightning occurs
             child: Container(
               color: Colors.white.withOpacity(0.3), // Quick flash effect
             ),

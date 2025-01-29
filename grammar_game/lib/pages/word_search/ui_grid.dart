@@ -279,7 +279,7 @@ class _WordGridState extends State<WordSearchGame> {
     final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
     //Will get the position of the x and y for the column and row
-    int row = ((localPosition.dy / 36).floor()) - 3;
+    int row = ((localPosition.dy / 36).floor()) - 4;
     int column = ((localPosition.dx / 36).floor()) - 1;
 
     //checks that row and column are within bounds

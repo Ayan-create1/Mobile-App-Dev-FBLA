@@ -6,82 +6,80 @@ import 'jupiter.dart';
 class DragAndDropGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          shadowColor: Colors.blueAccent,
-          //Will show title of screen and center that title
-          centerTitle: true,
-          title: Text(
-            "GRAVITY DROP",
-            style: TextStyle(
+    return Scaffold(
+      appBar: AppBar(
+        shadowColor: Colors.blueAccent,
+        //Will show title of screen and center that title
+        centerTitle: true,
+        title: Text(
+          "GRAVITY DROP",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.orange[900],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.orange[300], // You can customize the color here
+        child: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.center, // Center the button, adjust if needed
+          children: [
+            IconButton(
+              icon: Icon(Icons.info),
               color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
             ),
-          ),
-          backgroundColor: Colors.orange[900],
-        ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.orange[300], // You can customize the color here
-          child: Row(
-            mainAxisAlignment:
-                MainAxisAlignment.center, // Center the button, adjust if needed
-            children: [
-              IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.white,
-                splashRadius: 50.0,
-                splashColor: Colors.black,
-                iconSize: 50.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(), // Your HomePage widget
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.home),
-                color: Colors.white,
-                splashRadius: 50.0,
-                splashColor: Colors.black,
-                iconSize: 50.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(), // Your HomePage widget
-                    ),
-                  );
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.share),
-                color: Colors.white,
-                splashRadius: 50.0,
-                splashColor: Colors.black,
-                iconSize: 50.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(), // Your HomePage widget
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
-        body: Center(
-          child: Stack(children: [
-            Positioned.fill(
-              child: LightningEffectPage(),
+            IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
             ),
-            DragAndDropGameScreen(),
-          ]),
+            IconButton(
+              icon: Icon(Icons.share),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
+            ),
+          ],
         ),
+      ),
+      body: Center(
+        child: Stack(children: [
+          Positioned.fill(
+            child: LightningEffectPage(),
+          ),
+          DragAndDropGameScreen(),
+        ]),
       ),
     );
   }
