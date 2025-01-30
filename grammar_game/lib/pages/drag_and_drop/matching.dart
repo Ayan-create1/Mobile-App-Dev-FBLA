@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'jupiter.dart';
+import '../word_search/pop_up.dart';
+
+bool popup = true;
 
 class DragAndDropGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    if (popup) {
+      // Schedule the iWordSPopup method to run after the build phase
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        iDragDPopup(context);
+        popup = false;
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.blueAccent,
@@ -32,12 +42,7 @@ class DragAndDropGame extends StatelessWidget {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
-                );
+                iDragDPopup(context);
               },
             ),
             IconButton(

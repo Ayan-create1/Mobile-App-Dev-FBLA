@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
+import '../word_search/pop_up.dart';
+
 //import 'package:shimmer/shimmer.dart';
 
 class StarPainter extends CustomPainter {
@@ -67,24 +69,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.white,
-                splashRadius: 50.0,
-                splashColor: Colors.black,
-                iconSize: 50.0,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => HomePage(), // Your HomePage widget
-                    ),
-                  );
-                },
-              )),
           //*Space Words Text
           Positioned(
             child: SizedBox(
@@ -97,6 +81,20 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          Positioned(
+              top: 0,
+              right: 0,
+              child: IconButton(
+                icon: Icon(Icons.info),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  print("works");
+                  iHomePopup(context);
+                },
+              )),
           //*Shows Saturn - Faded
           Positioned(
             top: 190,

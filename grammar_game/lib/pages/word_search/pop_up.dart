@@ -27,7 +27,7 @@ void iWordSPopup(BuildContext context) {
               ),
               SizedBox(height: 10),
               Text(
-                "Follow these steps to get started:",
+                "Follow the steps below",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -60,6 +60,104 @@ void iWordSPopup(BuildContext context) {
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
                 child: Text("Got it!"),
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void iDragDPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Gravity Drop",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Raleway',
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Follow the steps below:",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildInstructionStep(
+                  "Read the sentence and choose the appropriate punctuation"),
+              _buildInstructionStep(
+                  "Drag the selected punctuation into the answer box and hit check answer to check if your answer if right"),
+              SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Got it!"),
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+void iHomePopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Space Drop",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Raleway',
+                ),
+              ),
+              SizedBox(height: 10),
+              Text(
+                "Explore our universe of words",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 10),
+              _buildInstructionStep(
+                  "Uranian Search"),
+              Text("Explore the icy depths of Uranus by playing the classic Uranian version of Word Search"),
+              _buildInstructionStep(
+                  "Gravity Drop"),
+              Text("With constant storms and large crazy gravitational, try playing the classic Jupiterien version of Drag and Drop"),
+              SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("Let's Start Exploring!"),
               )
             ],
           ),
