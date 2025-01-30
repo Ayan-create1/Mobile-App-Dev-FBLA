@@ -74,6 +74,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
       setState(() {
         _message = 'Registration successful!';
       });
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
     } else {
       setState(() {
         _message = 'Please enter a username and password';
