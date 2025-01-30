@@ -79,12 +79,16 @@ class DragAndDropGame extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Stack(children: [
-          Positioned.fill(
-            child: LightningEffectPage(),
-          ),
-          DragAndDropGameScreen(),
-        ]),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: LightningEffectPage(),
+            ),
+            Center(
+              child: DragAndDropGameScreen(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -99,39 +103,39 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   List<Map<String, dynamic>> questions = [
     {
       'question':
-          'Complete the sentence with the correct punctuation: I love the game of basketball_ however, I do not play it myself',
+          'Complete the sentence with the correct punctuation:\n\nI love the game of basketball ____ however, I do not play it myself',
       'answers': [';', '.', ':', 'No change'],
       'correctAnswer': ';'
     },
     {
       'question':
-          'Complete the sentence with the correct punctuation: Although he is lactose intolerant_ he likes to eat pizza for lunch.',
+          'Complete the sentence with the correct punctuation:\n\nAlthough he is lactose intolerant ____ he likes to eat pizza for lunch.',
       'answers': [';', '.', ',', '-'],
       'correctAnswer': ','
     },
     {
       'question':
-          'Fill in the blank with the correct punctuation: Bats are nocturnal creatures_ they come out only during the night.',
+          'Fill in the blank with the correct punctuation:\n\nBats are nocturnal creatures ____ they come out only during the night.',
       'answers': [',', '.', ':', ';'],
       'correctAnswer': ';'
     },
     {
       'question':
-          'Fill in the blank with the correct punctuation: When I turn 16_ I\'m going to buy a car.',
+          'Fill in the blank with the correct punctuation:\n\nWhen I turn 16 ____ I\'m going to buy a car.',
       'answers': ['No change', ';', '-', ','],
       'correctAnswer': ','
     },
     {
       'question':
-          'Fill in the blanks with the correct punctuation: After college, James had three options: get a job_ apply to graduate school_ or become a criminal.',
+          'Fill in the blanks with the correct punctuation:\n\nAfter college, James had three options: get a job ____ apply to graduate school ____ or become a criminal.',
       'answers': [',', '-', ':', 'No change'],
       'correctAnswer': ','
     },
     {
       'question':
-          'Fill in the blanks with the correct punctuation: The homerun ball smashed through_the neighbor\'s window_and rolled into the living room.',
-      'answers': [',', '()', ':', '-'],
-      'correctAnswer': '-'
+          'Fill in the blanks with the correct punctuation:\n\nThe homerun ball smashed through ____the neighbor\'s window and rolled into the living room.',
+      'answers': [',', '()', ':', 'No change'],
+      'correctAnswer': 'No change'
     },
   ];
 
@@ -149,11 +153,33 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Text(
-            questions[currentQuestionIndex]['question'],
-            style: TextStyle(fontSize: 18),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: () {}, // Do nothing when pressed
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellow[900],
+                shadowColor: Colors.black, // Remove shadow
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(10), // Optional: rounded corners
+                ),
+                padding: EdgeInsets.all(16), // Padding inside the button
+              ),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  textAlign: TextAlign.center,
+                  questions[currentQuestionIndex]['question'],
+                  style: TextStyle(
+                    fontSize: 23,
+                    color: Colors.white,
+                    //fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
         DragTarget<String>(
@@ -170,7 +196,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
               child: Center(
                 child: Text(
                   userAnswer.isEmpty ? 'Drop answer here' : userAnswer,
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 20, color: Colors.grey),
                 ),
               ),
             );
@@ -194,7 +220,13 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         SizedBox(height: 20),
         ElevatedButton(
           onPressed: _checkAnswer,
-          child: Text('Check Answer'),
+          child: Text(
+            'CHECK ANSWER',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.black,
+            ),
+          ),
         ),
       ],
     );
@@ -262,12 +294,13 @@ class AnswerBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50,
-      width: 100,
-      color: isDragging ? Colors.grey[300] : Colors.blue,
+      width: 150,
+      margin: EdgeInsets.all(10.0),
+      color: isDragging ? Colors.grey[300] : Colors.yellow[300],
       child: Center(
         child: Text(
           answer,
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: TextStyle(fontSize: 30, color: Colors.black),
         ),
       ),
     );
