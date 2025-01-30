@@ -20,6 +20,7 @@ bool isHorizontal = false;
 Offset previousLocalPosition = Offset.zero;
 Map<String, bool> wordStatus = {};
 List<String> counter = [];
+bool popup = true;
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -41,6 +42,14 @@ class _WordGridState extends State<WordSearchGame> {
   int? previousColumn;
   @override
   Widget build(BuildContext context) {
+    if (popup) {
+      // Schedule the iWordSPopup method to run after the build phase
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        iWordSPopup(context);
+        popup = false;
+      });
+    }
+
     //Scaffold will define new page in application
     //Returns the entire project page
     return Scaffold(
@@ -71,12 +80,7 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
-                );
+                iWordSPopup(context);
               },
             ),
             IconButton(

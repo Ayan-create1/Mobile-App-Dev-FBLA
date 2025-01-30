@@ -19,8 +19,11 @@ class LPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: Text('Home Page'),
+        backgroundColor: Colors.grey,
+        title: Text('Login Page'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -131,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // Validate the credentials
     if (_validateCredentials(username, password)) {
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => HomePage(),
