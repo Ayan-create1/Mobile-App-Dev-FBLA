@@ -1,13 +1,26 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'jupiter.dart';
 import '../word_search/pop_up.dart';
 import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/rendering.dart';
 
 bool popup = true;
 
-class DragAndDropGame extends StatelessWidget {
+class DragAndDropGame extends StatefulWidget {
+  @override
+  _DragAndDropGameState createState() => _DragAndDropGameState();
+}
+
+class _DragAndDropGameState extends State<DragAndDropGame> {
+  final GlobalKey _screenshotKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     if (popup) {
@@ -68,24 +81,79 @@ class DragAndDropGame extends StatelessWidget {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Share.share("hello");
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _captureAndShare(_screenshotKey);
+                });
               },
             ),
           ],
         ),
       ),
-      body: Center(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: LightningEffectPage(),
-            ),
-            Center(
-              child: DragAndDropGameScreen(),
-            ),
-          ],
+      body: ScreenshotArea(
+        screenshotKey: _screenshotKey,
+        child: Center(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: LightningEffectPage(),
+              ),
+              Center(
+                child: DragAndDropGameScreen(),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Future<void> _captureAndShare(GlobalKey boundaryKey) async {
+    try {
+      if (_screenshotKey.currentContext == null) {
+        print("Current context is null. The widget might not be built yet.");
+        return;
+      }
+
+      final RenderRepaintBoundary boundary = _screenshotKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+
+      if (boundary.debugNeedsPaint) {
+        await Future.delayed(Duration(milliseconds: 20));
+      }
+
+      //Captures the image
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      if (byteData == null) return;
+      final Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      //Saves Image to temporary file
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/screenshot.png').create();
+      await file.writeAsBytes(pngBytes);
+
+      //Shares image with shareplus
+      await Share.shareXFiles([XFile(file.path)],
+          text: 'Help me on this drag and drop!');
+    } catch (e) {
+      print("Error capturing and sharing screenshot: $e");
+    }
+  }
+}
+
+class ScreenshotArea extends StatelessWidget {
+  final Widget child;
+  final GlobalKey screenshotKey;
+
+  const ScreenshotArea(
+      {Key? key, required this.child, required this.screenshotKey})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      key: screenshotKey, // Use the correct GlobalKey here
+      child: child,
     );
   }
 }
