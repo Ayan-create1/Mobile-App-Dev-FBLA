@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'jupiter.dart';
 import '../word_search/pop_up.dart';
+import 'package:share_plus/share_plus.dart';
 
 bool popup = true;
 
@@ -67,12 +68,7 @@ class DragAndDropGame extends StatelessWidget {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
-                );
+                Share.share("hello");
               },
             ),
           ],
