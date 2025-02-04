@@ -32,10 +32,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Color> spaceGradient = [
       Colors.amber[400]!,
-
-      //Colors.deepOrange[800]!,
       Colors.black,
     ];
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -64,16 +66,18 @@ class HomePage extends StatelessWidget {
           Center(
             child: Image.asset(
               'assets/Sun_Edited (1).png',
-              width: 200,
-              height: 200,
+              width: screenWidth * 0.55, // Relative to screen width
+              height: screenWidth * 0.55, // Maintain aspect ratio
             ),
           ),
 
           //*Space Words Text
           Positioned(
+            top: screenHeight * 0.01, // 10% from top
+            left: 0,
             child: SizedBox(
-              height: 180.0,
-              width: MediaQuery.of(context).size.width,
+              height: screenHeight * 0.2, // 15% height of the screen
+              width: screenWidth,
               child: Image.asset(
                 'assets/Space Text (2).png',
                 fit: BoxFit.fitHeight,
@@ -82,89 +86,90 @@ class HomePage extends StatelessWidget {
           ),
 
           Positioned(
-              top: 0,
-              right: 0,
-              child: IconButton(
-                icon: Icon(Icons.info),
-                color: Colors.white,
-                splashRadius: 50.0,
-                splashColor: Colors.black,
-                iconSize: 50.0,
-                onPressed: () {
-                  //print("works");
-                  iHomePopup(context);
-                },
-              )),
+            top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.info),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () {
+                iHomePopup(context);
+              },
+            ),
+          ),
+
           //*Shows Saturn - Faded
           Positioned(
-            top: 190,
-            left: 50,
+            top: screenHeight * 0.19, // 20% from top
+            left: screenWidth * 0.07, // 10% from left
             child: Image.asset(
               'assets/Saturn.png',
-              width: 150,
-              height: 150,
+              width: screenWidth * 0.4, // 20% of screen width
+              height: screenWidth * 0.4, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Earth - faded
           Positioned(
-            top: 500,
-            left: 140,
+            top: screenHeight * 0.58, // 50% from top
+            left: screenWidth * 0.4, // 35% from left
             child: Image.asset(
               'assets/Earth.png',
-              width: 100,
-              height: 100,
+              width: screenWidth * 0.23, // Relative to screen width
+              height: screenWidth * 0.23, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Mars - faded
           Positioned(
-            top: 460,
-            left: 30,
+            top: screenHeight * 0.52, // 46% from top
+            left: screenWidth * 0.1, // 5% from left
             child: Image.asset(
               'assets/Mars.png',
-              width: 100,
-              height: 100,
+              width: screenWidth * 0.27, // Relative to screen width
+              height: screenWidth * 0.27, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Neptune - faded
           Positioned(
-            top: 290,
-            right: 30,
+            top: screenHeight * 0.27, // 25% from top
+            right: screenWidth * 0.05, // 5% from right
             child: Image.asset(
               'assets/Neptune (1).png',
-              width: 100,
-              height: 100,
+              width: screenWidth * 0.25, // 20% of screen width
+              height: screenWidth * 0.25, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Mercury - faded
           Positioned(
-            top: 400,
-            right: 10,
+            top: screenHeight * 0.4, // 40% from top
+            right: screenWidth * 0.0, // 2% from right
             child: Image.asset(
               'assets/Mercury (1).png',
-              width: 100,
-              height: 100,
+              width: screenWidth * 0.25, // Relative to screen width
+              height: screenWidth * 0.25, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Venus - faded
           Positioned(
-            top: 480,
-            right: 60,
+            top: screenHeight * 0.5, // 48% from top
+            right: screenWidth * 0.1, // 10% from right
             child: Image.asset(
               'assets/Venus (1).png',
-              width: 100,
-              height: 100,
+              width: screenWidth * 0.3, // Relative to screen width
+              height: screenWidth * 0.35, // Maintain aspect ratio
             ),
           ),
 
           //*Shows Uranus Real
           Positioned(
-            top: 200,
-            right: 110,
+            top: screenHeight * 0.2, // 16% from top
+            right: screenWidth * 0.27, // 20% from right
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -177,16 +182,16 @@ class HomePage extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/Uranian Search.png',
-                width: 100,
-                height: 100,
+                width: screenWidth * 0.25, // Relative to screen width
+                height: screenWidth * 0.25, // Maintain aspect ratio
               ),
             ),
           ),
 
           //*Shows Jupiter - Real
           Positioned(
-            top: 340,
-            left: 10,
+            top: screenHeight * 0.37, // 34% from top
+            left: screenWidth * 0.00, // 2% from left
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -199,44 +204,11 @@ class HomePage extends StatelessWidget {
               },
               child: Image.asset(
                 'assets/Jupiter.png',
-                width: 110,
-                height: 110,
+                width: screenWidth * 0.25, // Relative to screen width
+                height: screenWidth * 0.25, // Maintain aspect ratio
               ),
             ),
           ),
-          /*
-          Positioned(
-            top: 20,
-            right: MediaQuery.of(context).size.width / 2 - 90,
-            child: ElevatedButton(
-              child: Text("Go to Word Search"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => WordSearchGame(),
-                  ),
-                );
-              },
-            ),
-          ),
-          
-          Positioned(
-            top: 70,
-            right: MediaQuery.of(context).size.width / 2 - 90,
-            child: ElevatedButton(
-              child: Text("Go to Drag and Drop"),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DragAndDropGame(),
-                  ),
-                );
-              },
-            ),
-          ),
-          */
         ],
       ),
     );
