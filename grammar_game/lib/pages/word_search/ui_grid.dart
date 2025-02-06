@@ -21,6 +21,7 @@ Offset previousLocalPosition = Offset.zero;
 Map<String, bool> wordStatus = {};
 List<String> counter = [];
 bool popup = true;
+final GlobalKey _gridKey = GlobalKey();
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
@@ -33,7 +34,7 @@ class WordSearchGame extends StatefulWidget {
 }
 
 class _WordGridState extends State<WordSearchGame> {
-  final double cellSize = 30.0;
+  //final double cellSize = 30.0;
   final int rowL = 9;
   final int colL = 9;
 
@@ -127,11 +128,20 @@ class _WordGridState extends State<WordSearchGame> {
             Column(
               children: [
                 _emptyContainter(),
-                GestureDetector(
-                  onPanStart: _handlePanStart,
-                  onPanUpdate: _handlePanUpdate,
-                  onPanEnd: (_) => _resolveHighlights(),
-                  child: _buildUI(),
+                Align(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width *
+                        0.9, // Adjust as needed
+                    //height: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
+                    alignment: Alignment.center,
+                    //margin: EdgeInsets.only(left: 2),
+                    child: GestureDetector(
+                      onPanStart: _handlePanStart,
+                      onPanUpdate: _handlePanUpdate,
+                      onPanEnd: (_) => _resolveHighlights(),
+                      child: _buildUI(), // Grid widget
+                    ),
+                  ),
                 ),
                 _emptyContainter(),
                 _buildBank(),
@@ -153,6 +163,8 @@ class _WordGridState extends State<WordSearchGame> {
 
   //*Will build the word bank
   Widget _buildBank() {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       //Will try to start this column at the end
       mainAxisAlignment: MainAxisAlignment.end,
@@ -178,7 +190,7 @@ class _WordGridState extends State<WordSearchGame> {
                             color: wordStatus[item] == true
                                 ? Colors.green
                                 : Colors.white,
-                            fontSize: 18,
+                            fontSize: screenWidth * 0.045,
                             fontWeight: FontWeight.bold,
                           ),
                         ))
@@ -195,7 +207,7 @@ class _WordGridState extends State<WordSearchGame> {
                           color: wordStatus[item] == true
                               ? Colors.green
                               : Colors.white,
-                          fontSize: 18,
+                          fontSize: screenWidth * 0.045,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -210,6 +222,8 @@ class _WordGridState extends State<WordSearchGame> {
   }
 
   Widget _buildUI() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     //Will contain all of the row widgets
     List<Widget> rows = [];
     //Will add each row individually to cells
@@ -222,8 +236,8 @@ class _WordGridState extends State<WordSearchGame> {
         cells.add(
           Container(
             alignment: Alignment.center,
-            width: 34,
-            height: 34,
+            width: screenWidth * 0.08,
+            height: screenHeight * 0.04,
             margin: EdgeInsets.all(1),
             decoration: BoxDecoration(
               //If containter is touched, make it purple, else if correctly highlighted, make green, else keep trans
@@ -241,7 +255,7 @@ class _WordGridState extends State<WordSearchGame> {
               grid[i][j],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -257,8 +271,9 @@ class _WordGridState extends State<WordSearchGame> {
     }
 
     //Will return a container of row widgets
-    return Container(
-      padding: const EdgeInsets.all(0),
+    return SizedBox(
+      //padding: const EdgeInsets.all(0),
+      key: _gridKey,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: rows,
@@ -278,65 +293,44 @@ class _WordGridState extends State<WordSearchGame> {
 
   //Will handle all drag related motions
   void _handleDrag(Offset globalPosition) {
-    //Will make the grid a local position on the phone. That will be converted to a local position for Pan features
-    final RenderBox gridBox = context.findRenderObject() as RenderBox;
-    final Offset localPosition = gridBox.globalToLocal(globalPosition);
+    // Ensure the widget context is ready to find the RenderBox
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Get the RenderBox for the grid area
+      final RenderBox gridBox =
+          _gridKey.currentContext?.findRenderObject() as RenderBox;
 
-    //Will get the position of the x and y for the column and row
-    int row = ((localPosition.dy / 36).floor()) - 4;
-    int column = ((localPosition.dx / 36).floor()) - 1;
+      // Convert the global position to local position relative to the grid
+      final Offset localPosition = gridBox.globalToLocal(globalPosition);
 
-    //checks that row and column are within bounds
-    if (row >= 0 && column >= 0 && row <= rowL && column <= colL) {
-      //Makes this cellKey showing current row and column
-      //! Important for text change color
-      String cellKey = "$row-$column";
+      // Determine the size of each grid cell
+      double cellWidth = gridBox.size.width / 10; // Assuming 10 columns
+      double cellHeight = gridBox.size.height / 10; // Assuming 10 rows
 
-      //*Attempts to only allow certain swipe direction
-      /*
-      if (previousRow == null && previousColumn == null) {
-        previousRow = row;
-        previousColumn = column;
-      }
+      // Print the local position for debugging purposes
+      print("Global Position: $globalPosition");
+      print("Local Position: $localPosition");
 
-      if (previousRow != null && previousColumn != null) {
-        double deltaX = localPosition.dx - previousLocalPosition.dx;
-        double deltaY = localPosition.dy - previousLocalPosition.dy;
+      // Calculate row and column based on the local position
+      int row = (localPosition.dy / cellHeight).floor();
+      int column = (localPosition.dx / cellWidth).floor();
 
-        if (deltaX.abs() > deltaY.abs()) {
-          isHorizontal = true;
-        }
-        // If the movement is primarily vertical
-        else if (deltaY.abs() > deltaX.abs()) {
-          isHorizontal = false;
-        }
+      // Check if the row and column are within bounds
+      if (row >= 0 && column >= 0 && row < 10 && column < 10) {
+        String cellKey = "$row-$column"; // Generate a unique key for the cell
 
-        if (isHorizontal && row != previousRow) {
-          return;
-        }
-        if (!isHorizontal && column != previousColumn) {
-          return;
+        // Update the highlight status for this cell
+        setState(() {
+          highlightStatus[cellKey] = true;
+        });
+
+        // Prevent double highlighting by tracking the last row and column
+        if (oRow != row || oCol != column) {
+          highlightedWords.add(grid[row][column]);
+          oRow = row;
+          oCol = column;
         }
       }
-      */
-
-      //if our row and column are valid, our cellKey status will be set to true
-      setState(() {
-        highlightStatus[cellKey] = true;
-      });
-
-      //Prevents double highlighting
-      if (oRow != row || oCol != column) {
-        highlightedWords.add(grid[row][column]);
-        oRow = row;
-        oCol = column;
-      }
-      /*
-      previousRow = row;
-      previousColumn = column;
-      previousLocalPosition = localPosition;
-      */
-    }
+    });
   }
 
   void _resolveHighlights() {
@@ -361,11 +355,14 @@ class _WordGridState extends State<WordSearchGame> {
     print("$highlightedWords-$checkWord-$status");
     print("$wordStatus");
     //Will clear highlightStatus and highlightedWords
-    setState(() {
-      highlightStatus.clear();
-    });
-    highlightedWords.clear();
 
+    Future.delayed(Duration(milliseconds: 100), () {
+      // Code that will run after the 1-second delay
+      setState(() {
+        highlightStatus.clear();
+      });
+      highlightedWords.clear();
+    });
     if (counter.length == 10) {
       _resetWordSearch();
       showPopup(context);
