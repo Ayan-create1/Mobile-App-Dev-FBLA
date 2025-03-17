@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/Login_page/login_page.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
+import 'package:grammar_game/pages/Login_page/login-page-firebase.dart';
+
 //import 'pages/word_search/ui_grid.dart';
 //! Implement a feature that only allows horizontal or vertical path
 //! Implement a word box to fill bottom half of screen
@@ -31,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HomePage(),
+      home: SignUpScreen(),
     );
   }
 }
