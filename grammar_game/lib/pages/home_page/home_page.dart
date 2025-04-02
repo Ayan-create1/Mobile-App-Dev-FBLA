@@ -7,10 +7,9 @@ import '../word_search/pop_up.dart';
 //import 'package:shimmer/shimmer.dart';
 
 class StarPainter extends CustomPainter {
-  final Random random = Random();
-
   @override
   void paint(Canvas canvas, Size size) {
+    final Random random = Random();
     // ignore: deprecated_member_use
     final paint = Paint()..color = Colors.white.withOpacity(0.7);
     for (int i = 0; i < 200; i++) {

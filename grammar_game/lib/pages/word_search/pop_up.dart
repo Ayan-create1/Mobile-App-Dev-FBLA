@@ -11,58 +11,85 @@ void iWordSPopup(BuildContext context) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Uranian Search Instructions",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Raleway',
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "Follow the steps below",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 10),
-              _buildInstructionStep(
-                  "Find the correct verb tense of the infinitive in the word bank"),
-              Text("Ex: to run - past => ran"),
-              _buildInstructionStep(
-                  "Once that word is found and is in the correct tense, highlight that word by running your finger across it"),
-              _buildInstructionStep(
-                  "If that word is in the correct tense once the dragging has stopped, the words highlight should turn green"),
-              SizedBox(height: 10),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.close_sharp,
-                      color: Colors.red, size: 20), // Bullet point icon
-                  SizedBox(width: 8), // Space between icon and text
-                  Expanded(
-                    child: Text(
-                      "You cannot highlight diagonally. Only horizontal and vertical highlighting is accepted",
-                      style: TextStyle(fontSize: 14),
-                    ), // Instruction text
+                  Text(
+                    "Uranian Search",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Raleway',
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Follow the steps below",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  _buildInstructionStep(
+                      "Find the correct verb tense of the infinitive in the word bank"),
+                  Text("Ex: to run - past => ran"),
+                  _buildInstructionStep(
+                      "Once that word is found and is in the correct tense, highlight that word by running your finger across it"),
+                  _buildInstructionStep(
+                      "If that word is in the correct tense once the dragging has stopped, the words highlight should turn green"),
+                  SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.close_sharp,
+                          color: Colors.red, size: 20), // Bullet point icon
+                      SizedBox(width: 8), // Space between icon and text
+                      Expanded(
+                        child: Text(
+                          "You cannot highlight diagonally. Only horizontal and vertical highlighting is accepted",
+                          style: TextStyle(fontSize: 14),
+                        ), // Instruction text
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Got it!"),
                   ),
                 ],
               ),
-              SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text("Got it!"),
-              )
-            ],
-          ),
+            ),
+            Positioned(
+              bottom: -10, // Adjust to position outside the dialog
+              right: -10, // Adjust position
+              child: CircleAvatar(
+                backgroundColor: Colors.lightBlue[100],
+                radius: 40,
+                backgroundImage: AssetImage(
+                  'assets/astronaut.webp',
+                ), // Replace with your image
+              ),
+            ),
+            Positioned(
+              bottom: -10, // Adjust to position outside the dialog
+              left: -10, // Adjust position
+              child: CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 40,
+                backgroundImage: AssetImage(
+                  'assets/uranusPop.png',
+                ), // Replace with your image
+              ),
+            ),
+          ],
         ),
       );
     },
@@ -132,7 +159,7 @@ void iHomePopup(BuildContext context) {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Space Drop",
+                "Space Words",
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -148,12 +175,12 @@ void iHomePopup(BuildContext context) {
                 ),
               ),
               SizedBox(height: 10),
-              _buildInstructionStep(
-                  "Uranian Search"),
-              Text("Explore the icy depths of Uranus by playing the classic Uranian version of Word Search"),
-              _buildInstructionStep(
-                  "Gravity Drop"),
-              Text("With constant storms and large crazy gravitational, try playing the classic Jupiterien version of Drag and Drop"),
+              _buildInstructionStep("Uranian Search"),
+              Text(
+                  "Explore the icy depths of Uranus by playing the classic Uranian version of Word Search"),
+              _buildInstructionStep("Gravity Drop"),
+              Text(
+                  "With constant storms and large crazy gravitational, try playing the classic Jupiterien version of Drag and Drop"),
               SizedBox(height: 15),
               ElevatedButton(
                 onPressed: () => Navigator.of(context).pop(),
