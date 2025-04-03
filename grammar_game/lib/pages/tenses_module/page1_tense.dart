@@ -85,24 +85,29 @@ class _Tense1PageState extends State<Tense1Page> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            _emptyContainer(20.0),
-            _title(),
-            _emptyContainer(20.0),
-            _infoBox(),
-            _emptyContainer(20.0),
-            Container(
-              width: MediaQuery.of(context).size.width * .85,
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.lightBlue[900], // Background color
-                borderRadius: BorderRadius.circular(15), // Rounded corners
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              _emptyContainer(30.0),
+              _title(),
+              _emptyContainer(20.0),
+              _infoBox(),
+              _emptyContainer(20.0),
+              Container(
+                width: MediaQuery.of(context).size.width * .85,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.lightBlue[900], // Background color
+                  borderRadius: BorderRadius.circular(15), // Rounded corners
+                ),
+                child: TapToRevealTexts(),
               ),
-              child: TapToRevealTexts(),
-            ),
-          ],
+              _emptyContainer(20.0),
+              _iPage(),
+              _emptyContainer(70.0),
+            ],
+          ),
         ),
       ),
     );
@@ -120,6 +125,48 @@ class _Tense1PageState extends State<Tense1Page> {
           fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _iPage() {
+    return Container(
+      width: MediaQuery.of(context).size.width * .85,
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.red[100], // Background color
+        borderRadius: BorderRadius.circular(15), // Rounded corners
+      ),
+      child: Center(
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "In Bottom Naviagation Bar\nNext Page: ",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              WidgetSpan(
+                child: Icon(Icons.arrow_forward, color: Colors.black),
+              ),
+              TextSpan(
+                text: "\nUranian Search: ",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              WidgetSpan(
+                child: Icon(Icons.grid_view, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
