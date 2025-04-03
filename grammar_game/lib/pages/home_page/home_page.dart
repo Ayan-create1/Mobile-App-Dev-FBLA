@@ -171,7 +171,7 @@ class HomePage extends StatelessWidget {
             right: screenWidth * 0.27, // 20% from right
             child: InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
@@ -193,7 +193,7 @@ class HomePage extends StatelessWidget {
             left: screenWidth * 0.00, // 2% from left
             child: InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>

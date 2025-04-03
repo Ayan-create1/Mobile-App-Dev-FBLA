@@ -3,6 +3,7 @@ import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
 import 'uranus.dart';
+import '../tenses_module/page1_tense.dart';
 
 //import 'dart:async';
 Map<String, bool> highlightStatus = {};
@@ -91,7 +92,7 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomePage(), // Your HomePage widget
@@ -106,10 +107,25 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomePage(), // Your HomePage widget
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.menu_book),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Tense1Page(), // Your HomePage widget
                   ),
                 );
               },

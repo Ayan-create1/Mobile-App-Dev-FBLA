@@ -67,7 +67,7 @@ class _DragAndDropGameState extends State<DragAndDropGame> {
               splashColor: Colors.black,
               iconSize: screenWidth * 0.1,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomePage(),
