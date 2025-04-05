@@ -1,15 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
+import 'page3_tense.dart';
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import '../word_search/ui_grid.dart';
 import 'page1_tense.dart';
-
-void main() {
-  runApp(MaterialApp(
-    home: Tense2Page(),
-  ));
-}
 
 class Tense2Page extends StatefulWidget {
   @override
@@ -140,7 +135,7 @@ class _Tense2PageState extends State<Tense2Page> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
+                    builder: (context) => Tense3Page(), // Your HomePage widget
                   ),
                 );
               },
@@ -155,7 +150,7 @@ class _Tense2PageState extends State<Tense2Page> {
               _emptyContainer(30.0),
               _title(),
               _emptyContainer(20.0),
-              _instrutionBox(),
+              _instructionBox(),
               _emptyContainer(20.0),
               _tenseInfo1(),
               _emptyContainer(5),
@@ -422,7 +417,7 @@ class _Tense2PageState extends State<Tense2Page> {
       width: MediaQuery.of(context).size.width * 0.9,
       alignment: Alignment.center,
       child: Text(
-        "Overview of Conjugation Types",
+        "Overview of Tenses",
         style: TextStyle(
           fontSize: 25,
           color: Colors.yellow,
@@ -433,7 +428,7 @@ class _Tense2PageState extends State<Tense2Page> {
     );
   }
 
-  Widget _instrutionBox() {
+  Widget _instructionBox() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       padding: EdgeInsets.all(10),
