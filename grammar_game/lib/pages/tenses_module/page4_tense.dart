@@ -121,21 +121,6 @@ class _Tense4PageState extends State<Tense4Page> {
                 );
               },
             ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward),
-              color: Colors.white,
-              splashRadius: 50.0,
-              splashColor: Colors.black,
-              iconSize: 50.0,
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
-                );
-              },
-            ),
           ],
         ),
       ),
@@ -165,6 +150,8 @@ class _Tense4PageState extends State<Tense4Page> {
                 ),
                 child: _game(),
               ),
+              _emptyContainer(20.0),
+              _iPage(),
               _emptyContainer(70.0),
             ],
           ),
@@ -263,6 +250,48 @@ class _Tense4PageState extends State<Tense4Page> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _iPage() {
+    return Container(
+      width: MediaQuery.of(context).size.width * .95,
+      padding: EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.red[100], // Background color
+        borderRadius: BorderRadius.circular(15), // Rounded corners
+      ),
+      child: Center(
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "In Bottom Naviagation Bar\nPrevious Page: ",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              WidgetSpan(
+                child: Icon(Icons.arrow_back, color: Colors.black),
+              ),
+              TextSpan(
+                text: "\nUranian Search: ",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              WidgetSpan(
+                child: Icon(Icons.grid_view, color: Colors.black),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
