@@ -3,12 +3,6 @@ import 'package:grammar_game/pages/home_page/home_page.dart';
 import '../word_search/ui_grid.dart';
 import 'page3_tense.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: Tense4Page(),
-  ));
-}
-
 class Question {
   final String prompt;
   final bool answer;

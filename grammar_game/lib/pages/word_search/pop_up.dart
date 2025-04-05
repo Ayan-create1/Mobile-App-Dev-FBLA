@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../home_page/home_page.dart';
 
@@ -267,60 +269,67 @@ void showPopup(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-          contentPadding: EdgeInsets.all(20),
-          backgroundColor: Colors.blue[100],
-          title: Center(
-            child: Text("Good Job!"),
-          ),
-          //content: Text("This is the popup content"),
-
-          actions: [
-            Center(
-              child: SizedBox(
-                width: 170,
-                height: 110,
-                child: Center(
-                  child: Material(
-                    elevation: 5,
-                    borderRadius: BorderRadius.circular(10),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          height: 50,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ),
-                              );
-                            },
-                            child: Text("Home"),
-                          ),
+        contentPadding: EdgeInsets.all(20),
+        backgroundColor: Colors.blue[100],
+        title: Center(
+          child: Text("Good Job!"),
+        ),
+        //content: Text("This is the popup content"),
+        actions: [
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  width: 120,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
                         ),
-                        Container(
-                          height: 10,
-                          color: Colors.blue[100],
-                        ),
-                        SizedBox(
-                          width: 150,
-                          height: 50,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text("Replay"),
-                          ),
-                        ),
-                      ],
+                      );
+                    },
+                    style: ButtonStyle(
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.black,
+                          width: 2)), // Black border around the button
+                      minimumSize: MaterialStateProperty.all(Size(
+                          double.infinity,
+                          20)), // Button height (adjust as needed)
+                      backgroundColor: MaterialStateProperty.all(
+                          Colors.white), // Background color of button
                     ),
+                    child: Text("Home"),
                   ),
                 ),
-              ),
+                SizedBox(height: 10),
+                Container(
+                  width: 120,
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    style: ButtonStyle(
+                      side: MaterialStateProperty.all(BorderSide(
+                          color: Colors.black,
+                          width: 2)), // Black border around the button
+                      minimumSize: MaterialStateProperty.all(Size(
+                          double.infinity,
+                          20)), // Button height (adjust as needed)
+                      backgroundColor: MaterialStateProperty.all(
+                          Colors.white), // Background color of button
+                    ),
+                    child: Text("Replay"),
+                  ),
+                ),
+              ],
             ),
-          ]);
+          ),
+        ],
+      );
     },
   );
 }
