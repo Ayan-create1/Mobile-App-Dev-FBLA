@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import '../word_search/ui_grid.dart';
 import 'page2_tense.dart';
-
-void main() {
-  runApp(MaterialApp(
-    home: Tense3Page(),
-  ));
-}
+import 'page4_tense.dart';
 
 class Tense3Page extends StatefulWidget {
   @override
@@ -126,7 +121,7 @@ class _Tense3PageState extends State<Tense3Page> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
+                    builder: (context) => Tense4Page(), // Your HomePage widget
                   ),
                 );
               },
