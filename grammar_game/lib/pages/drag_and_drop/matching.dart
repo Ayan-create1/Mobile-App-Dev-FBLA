@@ -55,7 +55,7 @@ class _DragAndDropGameState extends State<DragAndDropGame> {
               color: Colors.white,
               splashRadius: 50.0,
               splashColor: Colors.black,
-              iconSize: screenWidth * 0.1,  // Dynamic size based on screen width
+              iconSize: screenWidth * 0.1, // Dynamic size based on screen width
               onPressed: () {
                 iDragDPopup(context);
               },
@@ -213,7 +213,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
+    double screenWidth = MediaQuery.of(context).size.width * .8;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Column(
@@ -224,6 +224,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(screenWidth * .1, screenHeight * .1),
                 backgroundColor: Colors.yellow[900],
                 shadowColor: Colors.black,
                 shape: RoundedRectangleBorder(
@@ -259,7 +260,8 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
               child: Center(
                 child: Text(
                   userAnswer.isEmpty ? 'Drop answer here' : userAnswer,
-                  style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.05, color: Colors.grey),
                 ),
               ),
             );
@@ -267,8 +269,9 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         ),
         SizedBox(height: screenHeight * 0.03), // Dynamic spacing
         Wrap(
-          spacing: screenWidth * 0.02, // Dynamic spacing between answers
-          children: questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
+          spacing: screenWidth * 0.01, // Dynamic spacing between answers
+          children:
+              questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
             return Draggable<String>(
               data: answer,
               child: AnswerBox(answer: answer),
@@ -295,7 +298,8 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   }
 
   void _checkAnswer() {
-    bool isCorrect = userAnswer == questions[currentQuestionIndex]['correctAnswer'];
+    bool isCorrect =
+        userAnswer == questions[currentQuestionIndex]['correctAnswer'];
     if (!isCorrect) {
       incorrectQuestions.add(questions[currentQuestionIndex]);
     }
@@ -355,14 +359,18 @@ class AnswerBox extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
+      padding: EdgeInsets.all(8),
       height: screenWidth * 0.1, // Dynamic height based on screen width
-      width: screenWidth * 0.40, // Dynamic width based on screen width
+      width: screenWidth * 0.4, // Dynamic width based on screen width
       margin: EdgeInsets.all(screenWidth * 0.02), // Dynamic margin
       color: isDragging ? Colors.grey[300] : Colors.yellow[300],
       child: Center(
         child: Text(
           answer,
-          style: TextStyle(fontSize: screenWidth * 0.08, color: Colors.black), // Dynamic font size
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: screenWidth * 0.04,
+              color: Colors.black), // Dynamic font size
         ),
       ),
     );
