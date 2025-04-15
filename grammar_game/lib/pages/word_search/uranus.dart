@@ -83,8 +83,9 @@ class CloudPainter extends CustomPainter {
 
     // Cloud Positions (Move them horizontally using animationValue)
     //First Cloud
+
     double cloudX = size.width * (0.8 * animationValue);
-    double cloudY = size.height * 0.625;
+    double cloudY = size.height * 0.67;
 
     Path cloudPath = Path()
       ..moveTo(cloudX, cloudY)

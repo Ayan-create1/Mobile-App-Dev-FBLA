@@ -1,25 +1,41 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 import 'jupiter.dart';
 import '../word_search/pop_up.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/rendering.dart';
 
 bool popup = true;
 
-class DragAndDropGame extends StatelessWidget {
+class DragAndDropGame extends StatefulWidget {
+  @override
+  _DragAndDropGameState createState() => _DragAndDropGameState();
+}
+
+class _DragAndDropGameState extends State<DragAndDropGame> {
+  final GlobalKey _screenshotKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     if (popup) {
-      // Schedule the iWordSPopup method to run after the build phase
       WidgetsBinding.instance.addPostFrameCallback((_) {
         iDragDPopup(context);
         popup = false;
       });
     }
+
+    // Use MediaQuery for screen dimensions
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         shadowColor: Colors.blueAccent,
-        //Will show title of screen and center that title
         centerTitle: true,
         title: Text(
           "GRAVITY DROP",
@@ -30,17 +46,16 @@ class DragAndDropGame extends StatelessWidget {
         backgroundColor: Colors.orange[900],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.orange[300], // You can customize the color here
+        color: Colors.orange[300],
         child: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.center, // Center the button, adjust if needed
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
               icon: Icon(Icons.info),
               color: Colors.white,
               splashRadius: 50.0,
               splashColor: Colors.black,
-              iconSize: 50.0,
+              iconSize: screenWidth * 0.1, // Dynamic size based on screen width
               onPressed: () {
                 iDragDPopup(context);
               },
@@ -50,12 +65,12 @@ class DragAndDropGame extends StatelessWidget {
               color: Colors.white,
               splashRadius: 50.0,
               splashColor: Colors.black,
-              iconSize: 50.0,
+              iconSize: screenWidth * 0.1,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
+                    builder: (context) => HomePage(),
                   ),
                 );
               },
@@ -65,31 +80,78 @@ class DragAndDropGame extends StatelessWidget {
               color: Colors.white,
               splashRadius: 50.0,
               splashColor: Colors.black,
-              iconSize: 50.0,
+              iconSize: screenWidth * 0.1,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
-                );
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _captureAndShare(_screenshotKey);
+                });
               },
             ),
           ],
         ),
       ),
-      body: Center(
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: LightningEffectPage(),
-            ),
-            Center(
-              child: DragAndDropGameScreen(),
-            ),
-          ],
+      body: ScreenshotArea(
+        screenshotKey: _screenshotKey,
+        child: Center(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: LightningEffectPage(),
+              ),
+              Center(
+                child: DragAndDropGameScreen(),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Future<void> _captureAndShare(GlobalKey boundaryKey) async {
+    try {
+      if (_screenshotKey.currentContext == null) {
+        print("Current context is null. The widget might not be built yet.");
+        return;
+      }
+
+      final RenderRepaintBoundary boundary = _screenshotKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+
+      if (boundary.debugNeedsPaint) {
+        await Future.delayed(Duration(milliseconds: 20));
+      }
+
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ImageByteFormat.png);
+      if (byteData == null) return;
+      final Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/screenshot.png').create();
+      await file.writeAsBytes(pngBytes);
+
+      await Share.shareXFiles([XFile(file.path)],
+          text: 'Help me on this drag and drop!');
+    } catch (e) {
+      print("Error capturing and sharing screenshot: $e");
+    }
+  }
+}
+
+class ScreenshotArea extends StatelessWidget {
+  final Widget child;
+  final GlobalKey screenshotKey;
+
+  const ScreenshotArea(
+      {Key? key, required this.child, required this.screenshotKey})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      key: screenshotKey,
+      child: child,
     );
   }
 }
@@ -151,21 +213,24 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width * .8;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Column(
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(screenWidth * 0.05), // Dynamic padding
             child: ElevatedButton(
-              onPressed: () {}, // Do nothing when pressed
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(screenWidth * .1, screenHeight * .1),
                 backgroundColor: Colors.yellow[900],
-                shadowColor: Colors.black, // Remove shadow
+                shadowColor: Colors.black,
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(10), // Optional: rounded corners
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                padding: EdgeInsets.all(16), // Padding inside the button
+                padding: EdgeInsets.all(screenWidth * 0.05), // Dynamic padding
               ),
               child: Align(
                 alignment: Alignment.center,
@@ -173,9 +238,8 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
                   textAlign: TextAlign.center,
                   questions[currentQuestionIndex]['question'],
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: screenWidth * 0.06, // Dynamic font size
                     color: Colors.white,
-                    //fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -190,21 +254,22 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
           },
           builder: (context, candidateData, rejectedData) {
             return Container(
-              height: 50,
-              width: 200,
+              height: screenHeight * 0.08, // Dynamic height
+              width: screenWidth * 0.5, // Dynamic width
               color: Colors.grey[200],
               child: Center(
                 child: Text(
                   userAnswer.isEmpty ? 'Drop answer here' : userAnswer,
-                  style: TextStyle(fontSize: 20, color: Colors.grey),
+                  style: TextStyle(
+                      fontSize: screenWidth * 0.05, color: Colors.grey),
                 ),
               ),
             );
           },
         ),
-        SizedBox(height: 20),
+        SizedBox(height: screenHeight * 0.03), // Dynamic spacing
         Wrap(
-          spacing: 10,
+          spacing: screenWidth * 0.01, // Dynamic spacing between answers
           children:
               questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
             return Draggable<String>(
@@ -217,13 +282,13 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
             );
           }).toList(),
         ),
-        SizedBox(height: 20),
+        SizedBox(height: screenHeight * 0.03), // Dynamic spacing
         ElevatedButton(
           onPressed: _checkAnswer,
           child: Text(
             'CHECK ANSWER',
             style: TextStyle(
-              fontSize: 20,
+              fontSize: screenWidth * 0.05, // Dynamic font size
               color: Colors.black,
             ),
           ),
@@ -259,7 +324,6 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
                   currentQuestionIndex = 0;
                   userAnswer = '';
                 } else {
-                  // All questions answered
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -292,15 +356,21 @@ class AnswerBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      height: 50,
-      width: 150,
-      margin: EdgeInsets.all(10.0),
+      padding: EdgeInsets.all(8),
+      height: screenWidth * 0.1, // Dynamic height based on screen width
+      width: screenWidth * 0.4, // Dynamic width based on screen width
+      margin: EdgeInsets.all(screenWidth * 0.02), // Dynamic margin
       color: isDragging ? Colors.grey[300] : Colors.yellow[300],
       child: Center(
         child: Text(
           answer,
-          style: TextStyle(fontSize: 30, color: Colors.black),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: screenWidth * 0.04,
+              color: Colors.black), // Dynamic font size
         ),
       ),
     );
