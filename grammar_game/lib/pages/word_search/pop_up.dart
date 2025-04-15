@@ -284,7 +284,7 @@ void showPopup(BuildContext context) {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(),
