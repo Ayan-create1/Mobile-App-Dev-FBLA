@@ -37,34 +37,47 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          shadowColor: Colors.black,
+          centerTitle: true,
+          title: Text(
+            "SIGN UP",
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.blueGrey[900],
+        ),
         body: ListView(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 50),
-      children: [
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(labelText: "Email"),
-        ),
-        TextField(
-          controller: _passwordController,
-          decoration: InputDecoration(labelText: "Password"),
-          obscureText: true,
-        ),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 50),
+          children: [
+            TextField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: "Email"),
+            ),
+            TextField(
+              controller: _passwordController,
+              decoration: InputDecoration(labelText: "Password"),
+              obscureText: true,
+            ),
 
-        SizedBox(height: 12),
-        ElevatedButton(
-          onPressed: login,
-          child: const Text("Login"),
-        ),
+            SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: login,
+              child: const Text("Login"),
+            ),
 
-        SizedBox(height: 12),
+            SizedBox(height: 12),
 
-        //Go to sign up page
-        GestureDetector(
-          onTap: () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const RegisterPage())),
-          child: Center(child: Text("Don't have an account? Sign up!")),
-        ),
-      ],
-    ));
+            //Go to sign up page
+            GestureDetector(
+              onTap: () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const RegisterPage())),
+              child: Center(child: Text("Don't have an account? Sign up!")),
+            ),
+          ],
+        ));
   }
 }
