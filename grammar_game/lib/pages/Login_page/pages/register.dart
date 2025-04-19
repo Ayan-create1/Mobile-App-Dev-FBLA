@@ -32,6 +32,11 @@ class _RegisterPageState extends State<RegisterPage> {
           .showSnackBar(const SnackBar(content: Text("Passwords don't match")));
       return;
     }
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Password must be 6 characters or longer")));
+      return;
+    }
 
     try {
       await authService.signUpWithEmailPassword(email, password);
