@@ -36,14 +36,33 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       await authService.signUpWithEmailPassword(email, password);
 
-      await Supabase.instance.client.auth.signOut();
+      final user = Supabase.instance.client.auth.currentUser;
 
+      if (user != null) {
+        final response =
+            await Supabase.instance.client.from('profiles').insert({
+          'id': user.id,
+          'username': 'new',
+          'points': 0,
+        });
+
+        if (response.error != null) {
+          print('Error inserting profile: ${response.error!.message}');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  'Error creating user profile: ${response.error!.message}')));
+          return;
+        } else {
+          print('Profile successfully created!');
+        }
+      }
+      await Supabase.instance.client.auth.signOut();
       await authService.signInWithEmailPassword(email, password);
       //pop the register page
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               "Sign Up Successful! Please Exit This App and Re-enter Accessing Login Page")));
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(Duration(seconds: 5), () {
         Navigator.pop(context);
       });
     } catch (e) {

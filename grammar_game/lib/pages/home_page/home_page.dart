@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
@@ -27,14 +28,53 @@ class StarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int points = 0;
   static final authService = AuthService();
   void logout() async {
     await authService.signOut();
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchUserPoints();
+  }
+
+  Future<void> fetchUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final response = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .maybeSingle();
+        if (response != null) {
+          setState(() {
+            points = response['points'];
+          });
+        } else {
+          print('No profile found');
+          await Supabase.instance.client.from('profiles').insert({
+            'id': user.id,
+            'points': 0,
+            'username': user.email,
+          });
+        }
+      } catch (e) {
+        print('Error fetching points: $e');
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     List<Color> spaceGradient = [
       Colors.amber[400]!,
@@ -103,6 +143,11 @@ class HomePage extends StatelessWidget {
               iconSize: screenWidth * 0.12, // Relative to screen width
               onPressed: () {
                 logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthGate()),
+                  (route) => false,
+                );
               },
             ),
           ),
@@ -195,12 +240,13 @@ class HomePage extends StatelessWidget {
             right: screenWidth * 0.27, // 20% from right
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         WordSearchGame(), // Replace with your desired page
                   ),
+                  (route) => false,
                 );
               },
               child: Image.asset(
@@ -217,18 +263,42 @@ class HomePage extends StatelessWidget {
             left: screenWidth * 0.00, // 2% from left
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         DragAndDropGame(), // Replace with your desired page
                   ),
+                  (route) => false,
                 );
               },
               child: Image.asset(
                 'assets/Jupiter.png',
                 width: screenWidth * 0.25, // Relative to screen width
                 height: screenWidth * 0.25, // Maintain aspect ratio
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: screenHeight * .1,
+            right: screenWidth * .1,
+            child: Container(
+              height: screenHeight * .05,
+              width: screenWidth * .8,
+              decoration: BoxDecoration(
+                color: Colors.black45, // Background color
+                borderRadius: BorderRadius.circular(15), // Rounded corners
+              ),
+              child: Center(
+                child: Text(
+                  "Total Points: $points",
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),

@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
 import 'uranus.dart';
@@ -10,6 +13,8 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
+import 'package:grammar_game/pages/Login_page/auth_gate.dart';
+import 'package:grammar_game/pages/Login_page/auth_service.dart';
 
 //import 'dart:async';
 Map<String, bool> highlightStatus = {};
@@ -43,9 +48,9 @@ class WordSearchGame extends StatefulWidget {
 class _WordGridState extends State<WordSearchGame> {
   final GlobalKey _screenshotKey = GlobalKey();
   //final double cellSize = 30.0;
+
   final int rowL = 9;
   final int colL = 9;
-
   //Will allow previous row and colum to be null
   int? previousRow;
   int? previousColumn;
@@ -99,11 +104,10 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (route) => false,
                 );
               },
             ),
@@ -126,11 +130,12 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Tense1Page(), // Your HomePage widget
                   ),
+                  (route) => false,
                 );
               },
             ),
@@ -427,7 +432,45 @@ class _WordGridState extends State<WordSearchGame> {
     */
   }
 
-  void _resetWordSearch() {
+  Future<int> getCurrentUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final data = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .single();
+
+        return data['points'] ?? 0;
+      } catch (e) {
+        print('Error fetching current points: $e');
+      }
+    }
+    return 0;
+  }
+
+  Future<void> addPointsToUser(int pointsEarned) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        int currentPoints = await getCurrentUserPoints();
+        int updatedPoints = currentPoints + pointsEarned;
+
+        await Supabase.instance.client
+            .from('profiles')
+            .update({'points': updatedPoints}).eq('id', user.id);
+
+        print('User points updated to $updatedPoints');
+      } catch (e) {
+        print('Error updating points: $e');
+      }
+    }
+  }
+
+  void _resetWordSearch() async {
     setState(() {
       wordStatus.clear();
       correctWords.clear();
@@ -440,6 +483,9 @@ class _WordGridState extends State<WordSearchGame> {
       hints = myDict[1];
       grid = test(words);
     });
+    final random = Random();
+    int randomNumber = random.nextInt(51) + 150;
+    await addPointsToUser(randomNumber);
   }
 }
 

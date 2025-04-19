@@ -41,7 +41,7 @@ class _SignInPageState extends State<SignInPage> {
           shadowColor: Colors.black,
           centerTitle: true,
           title: Text(
-            "SIGN UP",
+            "LOG IN",
             style: TextStyle(
               color: Colors.white,
             ),
