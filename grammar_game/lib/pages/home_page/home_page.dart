@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/Login_page/auth_gate.dart';
+import 'package:grammar_game/pages/Login_page/auth_service.dart';
+import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
@@ -26,6 +29,10 @@ class StarPainter extends CustomPainter {
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+  static final authService = AuthService();
+  void logout() async {
+    await authService.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,8 +91,25 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
+          //*logout button
           Positioned(
             top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.logout),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () {
+                logout();
+              },
+            ),
+          ),
+
+          //*Info button
+          Positioned(
+            top: 50,
             right: 0,
             child: IconButton(
               icon: Icon(Icons.info),

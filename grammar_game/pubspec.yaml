@@ -38,9 +38,15 @@ dependencies:
   cupertino_icons: ^1.0.8
   share_plus: ^7.0.9
   path_provider: ^2.0.14
+  supabase_flutter: ^2.8.4
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  flutter_launcher_icons: ^0.9.2
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/IMG_20250405_104224.png
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
