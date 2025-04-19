@@ -56,11 +56,19 @@ class _HomePageState extends State<HomePage> {
             .from('profiles')
             .select('points')
             .eq('id', user.id)
-            .single();
-
-        setState(() {
-          points = response['points'];
-        });
+            .maybeSingle();
+        if (response != null) {
+          setState(() {
+            points = response['points'];
+          });
+        } else {
+          print('No profile found');
+          await Supabase.instance.client.from('profiles').insert({
+            'id': user.id,
+            'points': 0,
+            'username': user.email,
+          });
+        }
       } catch (e) {
         print('Error fetching points: $e');
       }
@@ -135,6 +143,11 @@ class _HomePageState extends State<HomePage> {
               iconSize: screenWidth * 0.12, // Relative to screen width
               onPressed: () {
                 logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthGate()),
+                  (route) => false,
+                );
               },
             ),
           ),
@@ -227,12 +240,13 @@ class _HomePageState extends State<HomePage> {
             right: screenWidth * 0.27, // 20% from right
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         WordSearchGame(), // Replace with your desired page
                   ),
+                  (route) => false,
                 );
               },
               child: Image.asset(
@@ -249,12 +263,13 @@ class _HomePageState extends State<HomePage> {
             left: screenWidth * 0.00, // 2% from left
             child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
                         DragAndDropGame(), // Replace with your desired page
                   ),
+                  (route) => false,
                 );
               },
               child: Image.asset(

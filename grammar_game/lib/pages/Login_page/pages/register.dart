@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
         final response =
             await Supabase.instance.client.from('profiles').insert({
           'id': user.id,
+          'username': 'new',
           'points': 0,
         });
 

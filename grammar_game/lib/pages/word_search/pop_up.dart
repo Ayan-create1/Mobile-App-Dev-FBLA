@@ -209,10 +209,10 @@ void iHomePopup(BuildContext context) {
                   SizedBox(height: 10),
                   _buildInstructionStep("Uranian Search"),
                   Text(
-                      "Explore the icy depths of Uranus by playing the classic Uranian version of Word Search"),
+                      "Explore the icy depths of Uranus by playing the classic Uranian version of Word Search. (10-20 points per correct question)"),
                   _buildInstructionStep("Gravity Drop"),
                   Text(
-                      "With constant storms and crazy gravitaty, try playing the classic Jupiterien version of Drag and Drop"),
+                      "With constant storms and crazy gravitaty, try playing the classic Jupiterien version of Drag and Drop. (150-200 points per each completion)"),
                   SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
@@ -223,7 +223,7 @@ void iHomePopup(BuildContext context) {
             ),
             Positioned(
               top: 100, // Adjust to position outside the dialog
-              right: -30, // Adjust position
+              right: -40, // Adjust position
               child: Image.asset(
                 'assets/Uranian Search.png', // Replace with your image asset
                 width: 60, // Set image width
@@ -233,7 +233,7 @@ void iHomePopup(BuildContext context) {
             ),
             Positioned(
               top: 200, // Adjust to position outside the dialog
-              right: -30, // Adjust position
+              right: -40, // Adjust position
               child: Image.asset(
                 'assets/Jupiter.png', // Replace with your image asset
                 width: 60, // Set image width
@@ -284,11 +284,12 @@ void showPopup(BuildContext context) {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
                           builder: (context) => HomePage(),
                         ),
+                        (route) => false,
                       );
                     },
                     style: ButtonStyle(
