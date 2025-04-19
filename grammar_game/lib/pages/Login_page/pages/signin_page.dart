@@ -75,7 +75,24 @@ class _SignInPageState extends State<SignInPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const RegisterPage())),
-              child: Center(child: Text("Don't have an account? Sign up!")),
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: 300,
+                  decoration: BoxDecoration(
+                    color: Colors.blue[900], // Background color
+                    borderRadius: BorderRadius.circular(15), //
+                  ),
+                  child: Center(
+                      child: Text(
+                    "Make an account",
+                    style: TextStyle(
+                        color: Colors.white,
+                        //fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
+                ),
+              ),
             ),
           ],
         ));
