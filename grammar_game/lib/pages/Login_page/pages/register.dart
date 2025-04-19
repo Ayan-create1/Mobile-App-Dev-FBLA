@@ -67,8 +67,12 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text("Error: $e")));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                "Sign Up Successful! Please Exit This App and Re-enter Accessing Login Page")));
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.pop(context);
+        });
       }
     }
   }
