@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
@@ -27,14 +28,45 @@ class StarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int points = 0;
   static final authService = AuthService();
   void logout() async {
     await authService.signOut();
   }
 
   @override
+  void initState() {
+    super.initState();
+    fetchUserPoints();
+  }
+
+  Future<void> fetchUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final response = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .single();
+
+        setState(() {
+          points = response['points'];
+        });
+      } catch (e) {
+        print('Error fetching points: $e');
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     List<Color> spaceGradient = [
       Colors.amber[400]!,
@@ -229,6 +261,29 @@ class HomePage extends StatelessWidget {
                 'assets/Jupiter.png',
                 width: screenWidth * 0.25, // Relative to screen width
                 height: screenWidth * 0.25, // Maintain aspect ratio
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: screenHeight * .1,
+            right: screenWidth * .1,
+            child: Container(
+              height: screenHeight * .05,
+              width: screenWidth * .8,
+              decoration: BoxDecoration(
+                color: Colors.black45, // Background color
+                borderRadius: BorderRadius.circular(15), // Rounded corners
+              ),
+              child: Center(
+                child: Text(
+                  "Total Points: $points",
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
