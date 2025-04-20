@@ -8,6 +8,7 @@ class GrammarApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Interactive Grammar Module',
       theme: ThemeData(
         primarySwatch: Colors.orange,
