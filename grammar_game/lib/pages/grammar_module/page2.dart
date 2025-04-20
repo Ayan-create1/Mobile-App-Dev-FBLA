@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../drag_and_drop/matching.dart';
+import '../grammar_module/page3.dart';
+import '../grammar_module/page2.dart';
+import '../grammar_module/page1.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
 
 void main() {
   runApp(GrammarApp());
@@ -136,6 +141,74 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Punctuation Practice'),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.orange[300],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GrammarModule(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DragAndDropGame(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NonEssentialClausesPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: _inQuizMode
           ? _quizCompleted

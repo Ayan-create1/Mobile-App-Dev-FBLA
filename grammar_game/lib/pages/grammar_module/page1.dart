@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
+import '../drag_and_drop/matching.dart';
+import '../grammar_module/page2.dart';
 
 void main() {
   runApp(GrammarModule());
@@ -15,6 +18,59 @@ class GrammarModule extends StatelessWidget {
           backgroundColor: Colors.redAccent,
         ),
         body: GrammarLesson(),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange[300], // Matches the theme
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Center-align buttons
+            children: [
+              IconButton(
+                icon: Icon(Icons.grid_view),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DragAndDropGame(),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.home),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(), // Your HomePage widget
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_forward),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GrammarApp(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

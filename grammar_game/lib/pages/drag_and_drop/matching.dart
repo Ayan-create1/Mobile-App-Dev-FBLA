@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:grammar_game/pages/home_page/home_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'jupiter.dart';
 import '../word_search/pop_up.dart';
 import 'package:share_plus/share_plus.dart';
@@ -9,6 +10,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
+import '../grammar_module/page1.dart';
 
 bool popup = true;
 
@@ -67,11 +69,12 @@ class _DragAndDropGameState extends State<DragAndDropGame> {
               splashColor: Colors.black,
               iconSize: screenWidth * 0.1,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
                     builder: (context) => HomePage(),
                   ),
+                  (route) => false,
                 );
               },
             ),
@@ -85,6 +88,22 @@ class _DragAndDropGameState extends State<DragAndDropGame> {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   _captureAndShare(_screenshotKey);
                 });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.menu_book),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GrammarModule(), // Your HomePage widget
+                  ),
+                  (route) => false,
+                );
               },
             ),
           ],
@@ -297,12 +316,55 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
     );
   }
 
-  void _checkAnswer() {
+  Future<int> getCurrentUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final data = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .single();
+
+        return data['points'] ?? 0;
+      } catch (e) {
+        print('Error fetching current points: $e');
+      }
+    }
+    return 0;
+  }
+
+  Future<void> addPointsToUser(int pointsEarned) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        int currentPoints = await getCurrentUserPoints();
+        int updatedPoints = currentPoints + pointsEarned;
+
+        await Supabase.instance.client
+            .from('profiles')
+            .update({'points': updatedPoints}).eq('id', user.id);
+
+        print('User points updated to $updatedPoints');
+      } catch (e) {
+        print('Error updating points: $e');
+      }
+    }
+  }
+
+  void _checkAnswer() async {
     bool isCorrect =
         userAnswer == questions[currentQuestionIndex]['correctAnswer'];
-    if (!isCorrect) {
+    if (isCorrect) {
+      final random = Random();
+      int randomNumber = random.nextInt(11) + 10;
+      await addPointsToUser(randomNumber);
+    } else {
       incorrectQuestions.add(questions[currentQuestionIndex]);
     }
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(

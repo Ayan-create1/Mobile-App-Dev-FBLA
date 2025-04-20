@@ -1,8 +1,20 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'word_grid.dart';
 import 'pop_up.dart';
 import 'uranus.dart';
+import '../tenses_module/page1_tense.dart';
+import 'package:share_plus/share_plus.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:ui' as ui;
+import 'package:grammar_game/pages/Login_page/auth_gate.dart';
+import 'package:grammar_game/pages/Login_page/auth_service.dart';
 
 //import 'dart:async';
 Map<String, bool> highlightStatus = {};
@@ -34,10 +46,11 @@ class WordSearchGame extends StatefulWidget {
 }
 
 class _WordGridState extends State<WordSearchGame> {
+  final GlobalKey _screenshotKey = GlobalKey();
   //final double cellSize = 30.0;
+
   final int rowL = 9;
   final int colL = 9;
-
   //Will allow previous row and colum to be null
   int? previousRow;
   int? previousColumn;
@@ -91,11 +104,10 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
-                  ),
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (route) => false,
                 );
               },
             ),
@@ -106,11 +118,24 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
-                Navigator.push(
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _captureAndShare(_screenshotKey);
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.menu_book),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomePage(), // Your HomePage widget
+                    builder: (context) => Tense1Page(), // Your HomePage widget
                   ),
+                  (route) => false,
                 );
               },
             ),
@@ -118,39 +143,72 @@ class _WordGridState extends State<WordSearchGame> {
         ),
       ),
       //Body will define how the scaffold looks
-      body: Center(
-        //Will make a column widget where buildUI has gesture detectors then wordbank under
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: AuroraEffect(),
-            ),
-            Column(
-              children: [
-                _emptyContainter(),
-                Align(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width *
-                        0.9, // Adjust as needed
-                    //height: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
-                    alignment: Alignment.center,
-                    //margin: EdgeInsets.only(left: 2),
-                    child: GestureDetector(
-                      onPanStart: _handlePanStart,
-                      onPanUpdate: _handlePanUpdate,
-                      onPanEnd: (_) => _resolveHighlights(),
-                      child: _buildUI(), // Grid widget
+      body: ScreenshotArea(
+        screenshotKey: _screenshotKey,
+        child: Center(
+          //Will make a column widget where buildUI has gesture detectors then wordbank under
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: AuroraEffect(),
+              ),
+              Column(
+                children: [
+                  _emptyContainter(),
+                  Align(
+                    child: Container(
+                      width: MediaQuery.of(context).size.width *
+                          0.9, // Adjust as needed
+                      //height: MediaQuery.of(context).size.height * 0.5, // Adjust as needed
+                      alignment: Alignment.center,
+                      //margin: EdgeInsets.only(left: 2),
+                      child: GestureDetector(
+                        onPanStart: _handlePanStart,
+                        onPanUpdate: _handlePanUpdate,
+                        onPanEnd: (_) => _resolveHighlights(),
+                        child: _buildUI(), // Grid widget
+                      ),
                     ),
                   ),
-                ),
-                _emptyContainter(),
-                _buildBank(),
-              ],
-            ),
-          ],
+                  _emptyContainter(),
+                  _buildBank(),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _captureAndShare(GlobalKey boundaryKey) async {
+    try {
+      if (_screenshotKey.currentContext == null) {
+        print("Current context is null. The widget might not be built yet.");
+        return;
+      }
+
+      final RenderRepaintBoundary boundary = _screenshotKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+
+      if (boundary.debugNeedsPaint) {
+        await Future.delayed(Duration(milliseconds: 20));
+      }
+
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) return;
+      final Uint8List pngBytes = byteData.buffer.asUint8List();
+
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/screenshot.png').create();
+      await file.writeAsBytes(pngBytes);
+
+      await Share.shareXFiles([XFile(file.path)],
+          text: 'Help me on this drag and drop!');
+    } catch (e) {
+      print("Error capturing and sharing screenshot: $e");
+    }
   }
 
   Widget _emptyContainter() {
@@ -374,7 +432,45 @@ class _WordGridState extends State<WordSearchGame> {
     */
   }
 
-  void _resetWordSearch() {
+  Future<int> getCurrentUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final data = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .single();
+
+        return data['points'] ?? 0;
+      } catch (e) {
+        print('Error fetching current points: $e');
+      }
+    }
+    return 0;
+  }
+
+  Future<void> addPointsToUser(int pointsEarned) async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        int currentPoints = await getCurrentUserPoints();
+        int updatedPoints = currentPoints + pointsEarned;
+
+        await Supabase.instance.client
+            .from('profiles')
+            .update({'points': updatedPoints}).eq('id', user.id);
+
+        print('User points updated to $updatedPoints');
+      } catch (e) {
+        print('Error updating points: $e');
+      }
+    }
+  }
+
+  void _resetWordSearch() async {
     setState(() {
       wordStatus.clear();
       correctWords.clear();
@@ -387,5 +483,25 @@ class _WordGridState extends State<WordSearchGame> {
       hints = myDict[1];
       grid = test(words);
     });
+    final random = Random();
+    int randomNumber = random.nextInt(51) + 150;
+    await addPointsToUser(randomNumber);
+  }
+}
+
+class ScreenshotArea extends StatelessWidget {
+  final Widget child;
+  final GlobalKey screenshotKey;
+
+  const ScreenshotArea(
+      {Key? key, required this.child, required this.screenshotKey})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RepaintBoundary(
+      key: screenshotKey,
+      child: child,
+    );
   }
 }

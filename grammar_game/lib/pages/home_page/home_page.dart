@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/Login_page/auth_gate.dart';
+import 'package:grammar_game/pages/Login_page/auth_service.dart';
+import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
@@ -7,10 +11,10 @@ import 'dart:async';
 
 // Custom Painter for the starry background
 class StarPainter extends CustomPainter {
-  final Random random = Random();
-
   @override
   void paint(Canvas canvas, Size size) {
+    final Random random = Random();
+    // ignore: deprecated_member_use
     final paint = Paint()..color = Colors.white.withOpacity(0.7);
     for (int i = 0; i < 200; i++) {
       final dx = random.nextDouble() * size.width;
@@ -26,12 +30,27 @@ class StarPainter extends CustomPainter {
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+/*class _HomePageState extends State<HomePage> {
+  int points = 0;
+  static final authService = AuthService();
+  void logout() async {
+    await authService.signOut();
+  }
 
   @override
   _HomePageState createState() => _HomePageState();
-}
+}*/
 
 class _HomePageState extends State<HomePage> {
+  int points = 0;
+  static final authService = AuthService();
+  void logout() async {
+    await authService.signOut();
+  }
   final Random _random = Random();
 
   // Rocket and punctuation positions and velocities
@@ -46,6 +65,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    fetchUserPoints();
     _initializePositions();
     _startFloatingAnimation();
   }
@@ -94,7 +114,35 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  @override
+
+  Future<void> fetchUserPoints() async {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    if (user != null) {
+      try {
+        final response = await Supabase.instance.client
+            .from('profiles')
+            .select('points')
+            .eq('id', user.id)
+            .maybeSingle();
+        if (response != null) {
+          setState(() {
+            points = response['points'];
+          });
+        } else {
+          print('No profile found');
+          await Supabase.instance.client.from('profiles').insert({
+            'id': user.id,
+            'points': 0,
+            'username': user.email,
+          });
+        }
+      } catch (e) {
+        print('Error fetching points: $e');
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -179,8 +227,30 @@ class _HomePageState extends State<HomePage> {
           ),
 
           // Info button
+          //*logout button
           Positioned(
             top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.logout),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () {
+                logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AuthGate()),
+                  (route) => false,
+                );
+              },
+            ),
+          ),
+
+          //*Info button
+          Positioned(
+            top: 50,
             right: 0,
             child: IconButton(
               icon: Icon(Icons.info),
@@ -256,9 +326,13 @@ class _HomePageState extends State<HomePage> {
             right: screenWidth * 0.27,
             child: InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => WordSearchGame()),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        WordSearchGame(), // Replace with your desired page
+                  ),
+                  (route) => false,
                 );
               },
               child: Image.asset(
@@ -275,15 +349,42 @@ class _HomePageState extends State<HomePage> {
             left: screenWidth * 0.00,
             child: InkWell(
               onTap: () {
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => DragAndDropGame()),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        DragAndDropGame(), // Replace with your desired page
+                  ),
+                  (route) => false,
                 );
               },
               child: Image.asset(
                 'assets/Jupiter.png',
                 width: screenWidth * 0.25,
                 height: screenWidth * 0.25,
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: screenHeight * .1,
+            right: screenWidth * .1,
+            child: Container(
+              height: screenHeight * .05,
+              width: screenWidth * .8,
+              decoration: BoxDecoration(
+                color: Colors.black45, // Background color
+                borderRadius: BorderRadius.circular(15), // Rounded corners
+              ),
+              child: Center(
+                child: Text(
+                  "Total Points: $points",
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
