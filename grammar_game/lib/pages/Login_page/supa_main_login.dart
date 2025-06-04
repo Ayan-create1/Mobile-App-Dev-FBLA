@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+//Run flutter run -t lib/another_file.dart to start the app on phone when dubgging
 Future<void> main() async {
+  print('Initializing Supabase');
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
     url: "https://oqeaphdiebfsgqtzixoj.supabase.co",
@@ -12,6 +14,52 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('App state changed to: $state');
+
+    if (state == AppLifecycleState.resumed) {
+      // App came back to foreground
+      final session = Supabase.instance.client.auth.currentSession;
+      if (session == null) {
+        print("User is not logged in");
+        // You might want to redirect to login or refresh session
+      } else {
+        print("User is still logged in");
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: AuthGate(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+/*
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -23,3 +71,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
