@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grammar_game/pages/Login_page/auth_gate.dart';
-import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
 
 
 // Entry point of the Flutter app
@@ -28,19 +27,19 @@ class AboutMePage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(    
+      appBar: AppBar(
         title: Text('About Us'),
-        backgroundColor: Colors.white12, // Dark space-themed AppBar
-        leading: IconButton(
+        backgroundColor: Colors.white10, // Dark space-themed AppBar
+        /*leading: IconButton(
   icon: Icon(Icons.arrow_back), // Back icon
   onPressed: () {
     Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(builder: (context) => AuthGate()),
+      MaterialPageRoute(builder: (context) => HomePage()), // Replace with your target screen class
       (route) => false, // Clears all previous routes
     );
   },
-),
+),*/
       ),
       body: Container(
         width: double.infinity, // Full screen width

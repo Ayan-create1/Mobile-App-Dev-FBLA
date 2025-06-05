@@ -8,6 +8,8 @@ import '../drag_and_drop/matching.dart';
 import 'dart:math';
 import '../word_search/pop_up.dart';
 import 'dart:async';
+import '../AboutMe/aboutMe2.dart';
+
 
 // Custom Painter for the starry background
 class StarPainter extends CustomPainter {
@@ -263,7 +265,25 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-
+          /*Positioned(
+            top: 100,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.lightbulb),
+              color: Colors.yellow[200],
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () {
+                logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutMePage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ),*/
           // Planets
           Positioned(
             top: screenHeight * 0.19,

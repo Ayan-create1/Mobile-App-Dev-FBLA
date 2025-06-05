@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/register.dart';
+import "package:grammar_game/pages/AboutMe/aboutMe.dart";
+
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -66,9 +69,6 @@ class _SignInPageState extends State<SignInPage> {
               onPressed: login,
               child: const Text("Login"),
             ),
-
-            SizedBox(height: 12),
-
             //Go to sign up page
             GestureDetector(
               onTap: () => Navigator.pushReplacement(
@@ -94,6 +94,33 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
             ),
+            SizedBox(height: 40), // Existing spacer
+
+// Added new button for About Me Page
+ElevatedButton(
+  onPressed: () {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => AboutMePage()), // Replace with the correct About Me Page class
+      (route) => false, // Clears all previous routes
+    );
+  },
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.purple, // Button color
+    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(8), // Rounded corners
+    ),
+  ),
+  child: Text(
+    "Go to About Me",
+    style: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+      color: Colors.white, // Text color
+    ),
+  ),
+),
           ],
         ));
   }
