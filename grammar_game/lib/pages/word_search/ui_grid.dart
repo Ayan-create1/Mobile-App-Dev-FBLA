@@ -117,10 +117,10 @@ class _WordGridState extends State<WordSearchGame> {
               splashRadius: 50.0,
               splashColor: Colors.black,
               iconSize: 50.0,
-              onPressed: () {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _captureAndShare(_screenshotKey);
-                });
+              onPressed: () async {
+                //WidgetsBinding.instance.addPostFrameCallback((_) {
+                  await _captureAndShare(_screenshotKey);
+                //});
               },
             ),
             IconButton(
@@ -181,6 +181,7 @@ class _WordGridState extends State<WordSearchGame> {
     );
   }
 
+  @pragma('vm:entry-point')
   Future<void> _captureAndShare(GlobalKey boundaryKey) async {
     try {
       if (_screenshotKey.currentContext == null) {

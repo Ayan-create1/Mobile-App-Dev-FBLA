@@ -46,12 +46,15 @@
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Need to save images to share.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Needed to share photos.</string>
+	<string>Need access to share images.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Needed to take photos for sharing.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Needed to record audio for sharing.</string>
+	<string>Needed to take screenshots for sharing.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Allow network access for sharing.</string>
+
 
 
 </dict>
