@@ -48,13 +48,13 @@ class LPage extends StatelessWidget {
               },
               child: Text('Login'),
             ),
+            
           ],
         ),
       ),
     );
   }
 }
-
 class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();

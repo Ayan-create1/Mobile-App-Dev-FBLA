@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import '../grammar_module/page2.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
+import '../drag_and_drop/matching.dart';
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: 'Interactive Grammar Module',
     theme: ThemeData(
       primarySwatch: Colors.orange,
@@ -26,6 +30,59 @@ class NonEssentialClausesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Non-Essential Clauses & Dashes'),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.orange[300], // Customize the background color
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center, // Align buttons in the center
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GrammarApp(), // Correctly reference GrammarApp
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DragAndDropGame(), // Correctly reference DragAndDropGame
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Correctly reference HomePage
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Center(
         child: Column(

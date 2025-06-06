@@ -7,9 +7,11 @@ import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
 import 'dart:math';
 import '../word_search/pop_up.dart';
+import 'dart:async';
+import '../AboutMe/aboutMe2.dart';
 
-//import 'package:shimmer/shimmer.dart';
 
+// Custom Painter for the starry background
 class StarPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -34,7 +36,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+/*class _HomePageState extends State<HomePage> {
   int points = 0;
   static final authService = AuthService();
   void logout() async {
@@ -42,10 +44,78 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  _HomePageState createState() => _HomePageState();
+}*/
+
+class _HomePageState extends State<HomePage> {
+  int points = 0;
+  static final authService = AuthService();
+  void logout() async {
+    await authService.signOut();
+  }
+  final Random _random = Random();
+
+  // Rocket and punctuation positions and velocities
+  late double _rocketX, _rocketY, _rocketDX, _rocketDY;
+  late List<double> _punctuationX, _punctuationY, _punctuationDX, _punctuationDY;
+
+  // Floating punctuation marks
+  final List<String> _punctuationMarks = [':', ';', ',', '.', '!', '?'];
+
+  late Timer _timer;
+
+  @override
   void initState() {
     super.initState();
     fetchUserPoints();
+    _initializePositions();
+    _startFloatingAnimation();
   }
+
+  void _initializePositions() {
+    _rocketX = 0.5;
+    _rocketY = 0.5;
+    _rocketDX = _randomVelocity();
+    _rocketDY = _randomVelocity();
+
+    _punctuationX = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationY = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationDX = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+    _punctuationDY = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+  }
+
+  double _randomVelocity() {
+    return (_random.nextDouble() * 0.007 + 0.003) * (_random.nextBool() ? 1 : -1);
+  }
+
+  void _startFloatingAnimation() {
+    _timer = Timer.periodic(const Duration(milliseconds: 50), (timer) {
+      setState(() {
+        // Update rocket position
+        _rocketX += _rocketDX;
+        _rocketY += _rocketDY;
+
+        if (_rocketX < -0.2 || _rocketX > 1.2) _rocketDX = -_rocketDX;
+        if (_rocketY < -0.2 || _rocketY > 1.2) _rocketDY = -_rocketDY;
+
+        // Update punctuation positions
+        for (int i = 0; i < _punctuationMarks.length; i++) {
+          _punctuationX[i] += _punctuationDX[i];
+          _punctuationY[i] += _punctuationDY[i];
+
+          if (_punctuationX[i] < -0.2 || _punctuationX[i] > 1.2) _punctuationDX[i] = -_punctuationDX[i];
+          if (_punctuationY[i] < -0.2 || _punctuationY[i] > 1.2) _punctuationDY[i] = -_punctuationDY[i];
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
 
   Future<void> fetchUserPoints() async {
     final user = Supabase.instance.client.auth.currentUser;
@@ -76,13 +146,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     List<Color> spaceGradient = [
       Colors.amber[400]!,
       Colors.black,
     ];
-
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -91,6 +161,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: [
+          // Background gradient
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
@@ -102,27 +173,53 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
-          //*Paints the Stars
+          // Paint stars
           CustomPaint(
             size: Size.infinite,
             painter: StarPainter(),
           ),
 
-          //*Shows Sun
-          Center(
+          // Floating punctuation marks
+          for (int i = 0; i < _punctuationMarks.length; i++)
+            Positioned(
+              left: _punctuationX[i] * screenWidth,
+              top: _punctuationY[i] * screenHeight,
+              child: Text(
+                _punctuationMarks[i],
+                style: const TextStyle(
+                  fontSize: 30,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+
+          // Flying rocket
+          Positioned(
+            left: _rocketX * screenWidth,
+            top: _rocketY * screenHeight,
             child: Image.asset(
-              'assets/Sun_Edited (1).png',
-              width: screenWidth * 0.55, // Relative to screen width
-              height: screenWidth * 0.55, // Maintain aspect ratio
+              'assets/rocket_new.png',
+              width: screenWidth * 0.1,
+              height: screenWidth * 0.1,
             ),
           ),
 
-          //*Space Words Text
+          // Sun in the center
+          Center(
+            child: Image.asset(
+              'assets/Sun_Edited (1).png',
+              width: screenWidth * 0.55,
+              height: screenWidth * 0.55,
+            ),
+          ),
+
+          // Space Words
           Positioned(
-            top: screenHeight * 0.01, // 10% from top
+            top: screenHeight * 0.01,
             left: 0,
             child: SizedBox(
-              height: screenHeight * 0.2, // 15% height of the screen
+              height: screenHeight * 0.2,
               width: screenWidth,
               child: Image.asset(
                 'assets/Space Text (2).png',
@@ -131,6 +228,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          // Info button
           //*logout button
           Positioned(
             top: 0,
@@ -161,83 +259,91 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
               splashRadius: 50.0,
               splashColor: Colors.black,
-              iconSize: screenWidth * 0.12, // Relative to screen width
+              iconSize: screenWidth * 0.12,
               onPressed: () {
                 iHomePopup(context);
               },
             ),
           ),
-
-          //*Shows Saturn - Faded
+          /*Positioned(
+            top: 100,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.lightbulb),
+              color: Colors.yellow[200],
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () {
+                logout();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutMePage()),
+                  (route) => false,
+                );
+              },
+            ),
+          ),*/
+          // Planets
           Positioned(
-            top: screenHeight * 0.19, // 20% from top
-            left: screenWidth * 0.07, // 10% from left
+            top: screenHeight * 0.19,
+            left: screenWidth * 0.07,
             child: Image.asset(
               'assets/Saturn.png',
-              width: screenWidth * 0.4, // 20% of screen width
-              height: screenWidth * 0.4, // Maintain aspect ratio
+              width: screenWidth * 0.4,
+              height: screenWidth * 0.4,
             ),
           ),
-
-          //*Shows Earth - faded
           Positioned(
-            top: screenHeight * 0.58, // 50% from top
-            left: screenWidth * 0.4, // 35% from left
+            top: screenHeight * 0.58,
+            left: screenWidth * 0.4,
             child: Image.asset(
               'assets/Earth.png',
-              width: screenWidth * 0.23, // Relative to screen width
-              height: screenWidth * 0.23, // Maintain aspect ratio
+              width: screenWidth * 0.23,
+              height: screenWidth * 0.23,
             ),
           ),
-
-          //*Shows Mars - faded
           Positioned(
-            top: screenHeight * 0.52, // 46% from top
-            left: screenWidth * 0.1, // 5% from left
+            top: screenHeight * 0.52,
+            left: screenWidth * 0.1,
             child: Image.asset(
               'assets/Mars.png',
-              width: screenWidth * 0.27, // Relative to screen width
-              height: screenWidth * 0.27, // Maintain aspect ratio
+              width: screenWidth * 0.27,
+              height: screenWidth * 0.27,
             ),
           ),
-
-          //*Shows Neptune - faded
           Positioned(
-            top: screenHeight * 0.27, // 25% from top
-            right: screenWidth * 0.05, // 5% from right
+            top: screenHeight * 0.27,
+            right: screenWidth * 0.05,
             child: Image.asset(
               'assets/Neptune (1).png',
-              width: screenWidth * 0.25, // 20% of screen width
-              height: screenWidth * 0.25, // Maintain aspect ratio
+              width: screenWidth * 0.25,
+              height: screenWidth * 0.25,
             ),
           ),
-
-          //*Shows Mercury - faded
           Positioned(
-            top: screenHeight * 0.4, // 40% from top
-            right: screenWidth * 0.0, // 2% from right
+            top: screenHeight * 0.4,
+            right: screenWidth * 0.0,
             child: Image.asset(
               'assets/Mercury (1).png',
-              width: screenWidth * 0.25, // Relative to screen width
-              height: screenWidth * 0.25, // Maintain aspect ratio
+              width: screenWidth * 0.25,
+              height: screenWidth * 0.25,
             ),
           ),
-
-          //*Shows Venus - faded
           Positioned(
-            top: screenHeight * 0.5, // 48% from top
-            right: screenWidth * 0.1, // 10% from right
+            top: screenHeight * 0.5,
+            right: screenWidth * 0.1,
             child: Image.asset(
               'assets/Venus (1).png',
-              width: screenWidth * 0.3, // Relative to screen width
-              height: screenWidth * 0.35, // Maintain aspect ratio
+              width: screenWidth * 0.3,
+              height: screenWidth * 0.35,
             ),
           ),
 
-          //*Shows Uranus Real
+          // Interactive Uranus
           Positioned(
-            top: screenHeight * 0.2, // 16% from top
-            right: screenWidth * 0.27, // 20% from right
+            top: screenHeight * 0.2,
+            right: screenWidth * 0.27,
             child: InkWell(
               onTap: () {
                 Navigator.pushAndRemoveUntil(
@@ -251,16 +357,16 @@ class _HomePageState extends State<HomePage> {
               },
               child: Image.asset(
                 'assets/Uranian Search.png',
-                width: screenWidth * 0.25, // Relative to screen width
-                height: screenWidth * 0.25, // Maintain aspect ratio
+                width: screenWidth * 0.25,
+                height: screenWidth * 0.25,
               ),
             ),
           ),
 
-          //*Shows Jupiter - Real
+          // Interactive Jupiter
           Positioned(
-            top: screenHeight * 0.37, // 34% from top
-            left: screenWidth * 0.00, // 2% from left
+            top: screenHeight * 0.37,
+            left: screenWidth * 0.00,
             child: InkWell(
               onTap: () {
                 Navigator.pushAndRemoveUntil(
@@ -274,8 +380,8 @@ class _HomePageState extends State<HomePage> {
               },
               child: Image.asset(
                 'assets/Jupiter.png',
-                width: screenWidth * 0.25, // Relative to screen width
-                height: screenWidth * 0.25, // Maintain aspect ratio
+                width: screenWidth * 0.25,
+                height: screenWidth * 0.25,
               ),
             ),
           ),

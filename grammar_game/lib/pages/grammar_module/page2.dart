@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import '../drag_and_drop/matching.dart';
+import '../grammar_module/page3.dart';
+import '../grammar_module/page2.dart';
+import '../grammar_module/page1.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
 
 void main() {
   runApp(GrammarApp());
@@ -8,6 +13,7 @@ class GrammarApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Interactive Grammar Module',
       theme: ThemeData(
         primarySwatch: Colors.orange,
@@ -43,35 +49,42 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
   final List<Map<String, Object>> _learningContent = [
     {
       'rule': 'Comma (,)',
-      'description': 'Used to separate items in a list or clauses in a sentence.',
+      'description':
+          'Used to separate items in a list or clauses in a sentence.',
       'example': 'Example: "I bought apples, oranges, and bananas."',
     },
     {
       'rule': 'Semicolon (;)',
-      'description': 'Links closely related ideas or separates items in a list when the items contain commas.',
-      'example': 'Example: "We visited Paris, France; Rome, Italy; and Berlin, Germany."',
+      'description':
+          'Links closely related ideas or separates items \nin a list when the items contain commas.',
+      'example':
+          'Example: "We visited Paris, France; \nRome, Italy; and Berlin, Germany."',
     },
     {
       'rule': 'Colon (:)',
       'description': 'Introduces a list, explanation, or further information.',
-      'example': 'Example: "She brought three things: a notebook, a pen, and her phone."',
+      'example':
+          'Example: "She brought three things: \na notebook, a pen, and her phone."',
     },
   ];
 
   // Quiz Section Content
   final List<Map<String, Object>> _quizContent = [
     {
-      'questionText': 'Which punctuation is correct? "I bought apples oranges bananas.__"',
+      'questionText':
+          'Which punctuation is correct? "I bought apples__ oranges__ bananas."',
       'options': [',', ';', ':'],
       'answer': ',',
     },
     {
-      'questionText': 'Which punctuation is correct? "We visited New York USA Los Angeles USA and Chicago USA.__"',
+      'questionText':
+          'Which punctuation is correct? "We visited New York, USA__ Los Angeles, USA__ and Chicago, USA."',
       'options': [';', ',', '.'],
       'answer': ';',
     },
     {
-      'questionText': 'Which punctuation is correct? "She brought three things a bag a book and her phone._"',
+      'questionText':
+          'Which punctuation is correct? "She brought three things__ a bag, a book, and her phone."',
       'options': [':', ',', ';'],
       'answer': ':',
     },
@@ -136,6 +149,74 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
       appBar: AppBar(
         title: Text('Punctuation Practice'),
       ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.orange[300],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GrammarModule(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.grid_view),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DragAndDropGame(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.home),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(),
+                  ),
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.arrow_forward),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NonEssentialClausesPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: _inQuizMode
           ? _quizCompleted
               ? Center(
@@ -144,7 +225,8 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
                     children: [
                       Text(
                         'Quiz Completed!\nYour Score: $_score/${_quizContent.length}',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(height: 20),
@@ -165,11 +247,14 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
                   children: [
                     Text(
                       _quizContent[_currentQuizIndex]['questionText'] as String,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
-                    ...(_quizContent[_currentQuizIndex]['options'] as List<String>).map((option) {
+                    ...(_quizContent[_currentQuizIndex]['options']
+                            as List<String>)
+                        .map((option) {
                       return ElevatedButton(
                         onPressed: () => _answerQuizQuestion(option),
                         child: Text(option),
@@ -192,7 +277,8 @@ class _GrammarHomePageState extends State<GrammarHomePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  _learningContent[_currentLearningIndex]['description'] as String,
+                  _learningContent[_currentLearningIndex]['description']
+                      as String,
                   style: TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),

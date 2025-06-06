@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/register.dart';
+import "package:grammar_game/pages/AboutMe/aboutMe.dart";
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -62,14 +63,13 @@ class _SignInPageState extends State<SignInPage> {
             ),
 
             SizedBox(height: 12),
+
             ElevatedButton(
               onPressed: login,
               child: const Text("Login"),
             ),
 
-            SizedBox(height: 12),
-
-            //Go to sign up page
+            //!Go to sign up page
             GestureDetector(
               onTap: () => Navigator.pushReplacement(
                   context,
@@ -86,6 +86,47 @@ class _SignInPageState extends State<SignInPage> {
                   child: Center(
                       child: Text(
                     "Make an account",
+                    style: TextStyle(
+                        color: Colors.white,
+                        //fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
+                ),
+              ),
+            ),
+            SizedBox(height: 40), // Existing spacer
+
+// Added new button for About Me Page
+            GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          AboutMePage()), // Replace with the correct About Me Page class
+                  (route) => false, // Clears all previous routes
+                );
+              },
+              /*
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.purple, // Button color
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15), // Rounded corners
+                ),
+              ),
+              */
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: 180,
+                  decoration: BoxDecoration(
+                    color: Colors.purple, // Background color
+                    borderRadius: BorderRadius.circular(15), //
+                  ),
+                  child: Center(
+                      child: Text(
+                    "Go to About Me",
                     style: TextStyle(
                         color: Colors.white,
                         //fontWeight: FontWeight.bold,

@@ -3,6 +3,7 @@ import "package:grammar_game/pages/Login_page/auth_service.dart";
 import "package:grammar_game/pages/Login_page/pages/signin_page.dart";
 import "package:grammar_game/pages/home_page/home_page.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
+import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -85,6 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        //! AppBar here
         appBar: AppBar(
           shadowColor: Colors.black,
           centerTitle: true,
@@ -95,6 +97,17 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
           backgroundColor: Colors.blueGrey[900],
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => AuthGate()),
+                (route) => false,
+              );
+            },
+          ),
         ),
         body: ListView(
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 50),

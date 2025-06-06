@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grammar_game/pages/home_page/home_page.dart';
+import '../drag_and_drop/matching.dart';
+import '../grammar_module/page2.dart';
 
 void main() {
   runApp(GrammarModule());
@@ -15,6 +18,59 @@ class GrammarModule extends StatelessWidget {
           backgroundColor: Colors.redAccent,
         ),
         body: GrammarLesson(),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.orange[300], // Matches the theme
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center, // Center-align buttons
+            children: [
+              IconButton(
+                icon: Icon(Icons.grid_view),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DragAndDropGame(),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.home),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => HomePage(), // Your HomePage widget
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.arrow_forward),
+                color: Colors.white,
+                splashRadius: 50.0,
+                splashColor: Colors.black,
+                iconSize: 50.0,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GrammarApp(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -80,8 +136,9 @@ class _GrammarLessonState extends State<GrammarLesson> {
             child: Text(content, style: TextStyle(fontSize: 16, color: Colors.white)),
           ),
           Text('Sentence: ${data['sentence']}', style: TextStyle(fontSize: 16, color: Colors.white70)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Wrap( // Added Wrap to prevent overflow in parts
+            alignment: WrapAlignment.center,
+            spacing: 8.0,
             children: data['parts'].keys.map<Widget>((part) {
               return GestureDetector(
                 onTap: () => onFeedbackUpdate(data['parts'][part]['explanation']),
@@ -99,7 +156,10 @@ class _GrammarLessonState extends State<GrammarLesson> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(feedback, style: TextStyle(color: feedback.contains('Correct') ? Colors.greenAccent : Colors.white)),
+            child: Text(
+              feedback,
+              style: TextStyle(color: feedback.contains('Correct') ? Colors.greenAccent : Colors.white),
+            ),
           ),
           ElevatedButton(
             onPressed: toggleAnswer,
@@ -124,8 +184,14 @@ class _GrammarLessonState extends State<GrammarLesson> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: double.infinity, // Ensures the gradient covers the full height
+      width: double.infinity, // Ensures the gradient covers the full width
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [Colors.redAccent, Colors.orangeAccent], begin: Alignment.topCenter, end: Alignment.bottomCenter),
+        gradient: LinearGradient(
+          colors: [Colors.redAccent, Colors.orangeAccent],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       ),
       child: SingleChildScrollView(
         child: Padding(
@@ -133,8 +199,10 @@ class _GrammarLessonState extends State<GrammarLesson> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Interactive Grammar Practice',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white)),
+              Text(
+                'Interactive Grammar Practice',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
               SizedBox(height: 16),
               buildInteractiveSection(
                 title: 'What is a Subject?',
@@ -156,8 +224,7 @@ class _GrammarLessonState extends State<GrammarLesson> {
               ),
               buildInteractiveSection(
                 title: 'Independent vs Dependent Clauses',
-                content:
-                    'An independent clause can stand alone as a sentence, while a dependent clause cannot.',
+                content: 'An independent clause can stand alone as a sentence, while a dependent clause cannot.',
                 data: clausesData,
                 feedback: clauseFeedback,
                 showAnswer: showClauseAnswer,

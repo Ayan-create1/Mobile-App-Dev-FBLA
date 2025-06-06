@@ -10,6 +10,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
+import '../grammar_module/page1.dart';
 
 bool popup = true;
 
@@ -87,6 +88,23 @@ class _DragAndDropGameState extends State<DragAndDropGame> {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   _captureAndShare(_screenshotKey);
                 });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.menu_book),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: 50.0,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        GrammarModule(), // Your HomePage widget
+                  ),
+                  (route) => false,
+                );
               },
             ),
           ],
@@ -286,6 +304,10 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         ),
         SizedBox(height: screenHeight * 0.03), // Dynamic spacing
         ElevatedButton(
+          // ignore: deprecated_member_use
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+          ),
           onPressed: _checkAnswer,
           child: Text(
             'CHECK ANSWER',
