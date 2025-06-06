@@ -94,6 +94,7 @@ class _WordGridState extends State<WordSearchGame> {
               iconSize: 50.0,
               onPressed: () {
                 iWordSPopup(context);
+                print("W");
               },
             ),
             IconButton(
@@ -116,9 +117,12 @@ class _WordGridState extends State<WordSearchGame> {
               splashRadius: 50.0,
               splashColor: Colors.black,
               iconSize: 50.0,
-              onPressed: () {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  _captureAndShare(_screenshotKey);
+              onPressed: () async {
+                print("bfWidget");
+                WidgetsBinding.instance.addPostFrameCallback((_) async {
+                  print("begin");
+                  await _captureAndShare(_screenshotKey);
+                  print("end");
                 });
               },
             ),
@@ -129,6 +133,7 @@ class _WordGridState extends State<WordSearchGame> {
               splashColor: Colors.black,
               iconSize: 50.0,
               onPressed: () {
+                print("W");
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
@@ -181,6 +186,54 @@ class _WordGridState extends State<WordSearchGame> {
   }
 
   Future<void> _captureAndShare(GlobalKey boundaryKey) async {
+    print("Start capture share");
+    try {
+      final context = boundaryKey.currentContext;
+      if (context == null) {
+        print("Boundary key context is null.");
+        return;
+      }
+
+      final renderObject = context.findRenderObject();
+      if (renderObject == null || renderObject is! RenderRepaintBoundary) {
+        print("Render object is null or not a RepaintBoundary.");
+        return;
+      }
+
+      final boundary = renderObject as RenderRepaintBoundary;
+
+      if (boundary.debugNeedsPaint) {
+        print("Waiting for repaint to complete...");
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+
+      final image = await boundary.toImage(pixelRatio: 2.0); // Lowered from 3.0
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) {
+        print("ByteData is null.");
+        return;
+      }
+
+      final Uint8List pngBytes = byteData.buffer.asUint8List();
+      final tempDir = await getTemporaryDirectory();
+      final filePath = '${tempDir.path}/screenshot.png';
+      final file = await File(filePath).create();
+      await file.writeAsBytes(pngBytes);
+
+      await Share.shareXFiles(
+        [XFile(filePath)],
+        text: 'Help me on this drag and drop!',
+      );
+    } catch (e, stack) {
+      print("Error capturing and sharing screenshot: $e");
+      print(stack);
+    }
+  }
+
+/*
+  @pragma('vm:entry-point')
+  Future<void> _captureAndShare(GlobalKey boundaryKey) async {
+    print("Error2");
     try {
       if (_screenshotKey.currentContext == null) {
         print("Current context is null. The widget might not be built yet.");
@@ -209,6 +262,7 @@ class _WordGridState extends State<WordSearchGame> {
       print("Error capturing and sharing screenshot: $e");
     }
   }
+*/
 
   Widget _emptyContainter() {
     return Container(
