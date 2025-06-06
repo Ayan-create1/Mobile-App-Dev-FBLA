@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
 
-
 // Entry point of the Flutter app
+/*
 void main() {
   runApp(AboutMeApp());
 }
-=======
-
-// Entry point of the Flutter app
-/*void main() {
-  runApp(AboutMeApp());
-}
 */
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
-
 // Top-level widget for the app
 class AboutMeApp extends StatelessWidget {
   @override
@@ -37,26 +28,39 @@ class AboutMePage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-<<<<<<< HEAD
-      appBar: AppBar(    
-        title: Text('About Us'),
-        backgroundColor: Colors.white12, // Dark space-themed AppBar
-        leading: IconButton(
-  icon: Icon(Icons.arrow_back), // Back icon
-  onPressed: () {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => AuthGate()),
-      (route) => false, // Clears all previous routes
-    );
-  },
-),
-=======
       appBar: AppBar(
-        title: Text('About Us'),
-        backgroundColor: Colors.black87, // Dark space-themed AppBar
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
+        title: Text(
+          'ABOUT US',
+          style: TextStyle(
+            color: Colors.yellow[700],
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple[900],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => AuthGate()),
+              (route) => false,
+            );
+          },
+        ),
       ),
+      /*
+      appBar: AppBar(
+        title: Text(
+          'ABOUT US',
+          style: TextStyle(
+            color: Colors.yellow[700],
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple[900], // Dark space-themed AppBar
+      ),
+      */
       body: Container(
         width: double.infinity, // Full screen width
         height: double.infinity, // Full screen height
@@ -72,15 +76,12 @@ class AboutMePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(width: screenWidth, height: 30),
               // Section: Our Task
               buildSection(
                 title: 'Our Task',
-<<<<<<< HEAD
-                content: 'Design a mobile application that gamifies learning for subjects like math, science, history, or language arts, offering interactive quizzes, puzzles, and progress tracking.',
-=======
                 content:
                     'Design a mobile application that gamifies learning for subjects like math, science, history, or language arts, offering interactive quizzes, puzzles, and progress tracking.',
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
                 screenWidth: screenWidth,
               ),
               const SizedBox(height: 16.0), // Spacing between sections
@@ -88,12 +89,8 @@ class AboutMePage extends StatelessWidget {
               // Section: Our App
               buildSection(
                 title: 'Our App',
-<<<<<<< HEAD
-                content: 'A game where users can come to learn and practice various grammar concepts.',
-=======
                 content:
                     'A game where users can come to learn and practice various grammar concepts.',
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
                 screenWidth: screenWidth,
               ),
               const SizedBox(height: 16.0), // Spacing between sections
@@ -109,16 +106,21 @@ class AboutMePage extends StatelessWidget {
                 screenWidth: screenWidth,
               ),
               const SizedBox(height: 16.0), // Spacing between sections
-
+              buildBulletSection(
+                title: 'The Method',
+                bullets: [
+                  'The modules function as a small quiz to test the knowledge of the user',
+                  'The puzzles like wordsearch and drag and drop are meant to enhance our users engagement',
+                  'Rather than directly tracking progress, we use a points system to further motivate our users',
+                ],
+                screenWidth: screenWidth,
+              ),
+              const SizedBox(height: 16.0),
               // Section: More About the Theme
               buildSection(
                 title: 'More About Our App’s Theme',
-<<<<<<< HEAD
-                content: 'Space is a captivating theme that resonates with people of all ages. Within our app, this theme is thoughtfully woven into the graphics and design elements, fostering an immersive experience that inspires curiosity and enhances user engagement.',
-=======
                 content:
                     'Space is a captivating theme that resonates with people of all ages. Within our app, this theme is thoughtfully woven into the graphics and design elements, fostering an immersive experience that inspires curiosity and enhances user engagement.',
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
                 screenWidth: screenWidth,
               ),
             ],
@@ -216,8 +218,4 @@ class AboutMePage extends StatelessWidget {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> eb8b523b80ac3745727048aae8954883b0bf921c
