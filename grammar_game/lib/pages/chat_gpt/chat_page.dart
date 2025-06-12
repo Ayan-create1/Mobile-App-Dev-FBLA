@@ -2,14 +2,7 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:grammar_game/consts.dart';
-
-void main() {
-  runApp(
-    MaterialApp(
-      home: ChatPage(),
-    ),
-  );
-}
+import '../home_page/home_page.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -29,16 +22,38 @@ class _ChatPageState extends State<ChatPage> {
     enableLog: true,
   );
   final ChatUser _currentUser =
-      ChatUser(id: '1', firstName: 'Ayan', lastName: 'Agarwal');
-  final ChatUser _gptUser =
-      ChatUser(id: '2', firstName: 'Astro', lastName: 'Galaxia');
+      ChatUser(id: '1', firstName: 'User', lastName: 'Naut');
+  final ChatUser _gptUser = ChatUser(
+    id: '2',
+    firstName: 'Astro',
+    lastName: 'Galaxia',
+  );
 
   List<ChatMessage> _messages = <ChatMessage>[];
 
+  List<ChatUser> _typingUsers = <ChatUser>[];
+
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.home),
+            color: Colors.white,
+            splashRadius: 50.0,
+            splashColor: Colors.black,
+            iconSize: screenWidth * 0.1,
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+                (route) => false,
+              );
+            },
+          ),
           backgroundColor: Colors.green,
           title: const Text(
             'Speak to Astro',
@@ -48,6 +63,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
         ),
         body: DashChat(
+            typingUsers: _typingUsers,
             currentUser: _currentUser,
             messageOptions: const MessageOptions(
               currentUserContainerColor: Colors.lightBlue,
@@ -61,8 +77,15 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> getChatResponse(ChatMessage mes) async {
+    final userMessage = ChatMessage(
+      user: _currentUser,
+      text: mes.text,
+      createdAt: DateTime.now(),
+    );
+
     setState(() {
-      _messages.insert(0, mes);
+      _messages.insert(0, userMessage);
+      _typingUsers.add(_gptUser);
     });
     final List<Map<String, String>> _messagesHistory =
         _messages.reversed.map((mes) {
@@ -76,7 +99,10 @@ class _ChatPageState extends State<ChatPage> {
       messages: _messagesHistory,
       maxToken: 200,
     );
+
     final response = await _openAI.onChatCompletion(request: request);
+    print("GPT response content: ${response?.choices.first.message?.content}");
+
     for (var element in response!.choices) {
       if (element.message != null) {
         setState(() {
@@ -89,5 +115,8 @@ class _ChatPageState extends State<ChatPage> {
         });
       }
     }
+    setState(() {
+      _typingUsers.remove(_gptUser);
+    });
   }
 }

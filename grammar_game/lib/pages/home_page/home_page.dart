@@ -9,7 +9,7 @@ import 'dart:math';
 import '../word_search/pop_up.dart';
 import 'dart:async';
 import '../AboutMe/aboutMe2.dart';
-
+import '../chat_gpt/chat_page.dart';
 
 // Custom Painter for the starry background
 class StarPainter extends CustomPainter {
@@ -53,11 +53,15 @@ class _HomePageState extends State<HomePage> {
   void logout() async {
     await authService.signOut();
   }
+
   final Random _random = Random();
 
   // Rocket and punctuation positions and velocities
   late double _rocketX, _rocketY, _rocketDX, _rocketDY;
-  late List<double> _punctuationX, _punctuationY, _punctuationDX, _punctuationDY;
+  late List<double> _punctuationX,
+      _punctuationY,
+      _punctuationDX,
+      _punctuationDY;
 
   // Floating punctuation marks
   final List<String> _punctuationMarks = [':', ';', ',', '.', '!', '?'];
@@ -78,14 +82,19 @@ class _HomePageState extends State<HomePage> {
     _rocketDX = _randomVelocity();
     _rocketDY = _randomVelocity();
 
-    _punctuationX = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
-    _punctuationY = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
-    _punctuationDX = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
-    _punctuationDY = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+    _punctuationX =
+        List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationY =
+        List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationDX =
+        List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+    _punctuationDY =
+        List.generate(_punctuationMarks.length, (_) => _randomVelocity());
   }
 
   double _randomVelocity() {
-    return (_random.nextDouble() * 0.007 + 0.003) * (_random.nextBool() ? 1 : -1);
+    return (_random.nextDouble() * 0.007 + 0.003) *
+        (_random.nextBool() ? 1 : -1);
   }
 
   void _startFloatingAnimation() {
@@ -103,8 +112,10 @@ class _HomePageState extends State<HomePage> {
           _punctuationX[i] += _punctuationDX[i];
           _punctuationY[i] += _punctuationDY[i];
 
-          if (_punctuationX[i] < -0.2 || _punctuationX[i] > 1.2) _punctuationDX[i] = -_punctuationDX[i];
-          if (_punctuationY[i] < -0.2 || _punctuationY[i] > 1.2) _punctuationDY[i] = -_punctuationDY[i];
+          if (_punctuationX[i] < -0.2 || _punctuationX[i] > 1.2)
+            _punctuationDX[i] = -_punctuationDX[i];
+          if (_punctuationY[i] < -0.2 || _punctuationY[i] > 1.2)
+            _punctuationDY[i] = -_punctuationDY[i];
         }
       });
     });
@@ -115,7 +126,6 @@ class _HomePageState extends State<HomePage> {
     _timer.cancel();
     super.dispose();
   }
-
 
   Future<void> fetchUserPoints() async {
     final user = Supabase.instance.client.auth.currentUser;
@@ -315,11 +325,32 @@ class _HomePageState extends State<HomePage> {
           Positioned(
             top: screenHeight * 0.27,
             right: screenWidth * 0.05,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ChatPage(), // Replace with your desired page
+                  ),
+                  (route) => false,
+                );
+              },
+              child: Image.asset(
+                'assets/Neptune AI (1).png',
+                width: screenWidth * 0.25,
+                height: screenWidth * 0.25,
+              ),
+            ),
+            /*
+            top: screenHeight * 0.27,
+            right: screenWidth * 0.05,
             child: Image.asset(
-              'assets/Neptune (1).png',
+              'assets/Neptune AI (1).png',
               width: screenWidth * 0.25,
               height: screenWidth * 0.25,
-            ),
+              
+            ),*/
           ),
           Positioned(
             top: screenHeight * 0.4,
