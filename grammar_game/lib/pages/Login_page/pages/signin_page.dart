@@ -14,12 +14,42 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   //get auth service
   final authService = AuthService();
-
+  bool _isGoogleLoading = false;
+  final AuthService _authService = AuthService();
   //text controllers to acccess user input
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
   //login in button pressed
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _isGoogleLoading = true;
+    });
+
+    try {
+      final response = await _authService.signInWithGoogle();
+      if (response?.user != null) {
+        // Success - AuthGate will handle navigation
+        print('Successfully signed in with Google: ${response!.user!.email}');
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to sign in with Google: $error'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGoogleLoading = false;
+        });
+      }
+    }
+  }
+
   void login() async {
     //prepare data
     final email = _emailController.text;
@@ -72,6 +102,38 @@ class _SignInPageState extends State<SignInPage> {
 
             SizedBox(height: 20),
 
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton.icon(
+                onPressed: _isGoogleLoading ? null : _signInWithGoogle,
+                icon: _isGoogleLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.login, color: Colors.white),
+                label: Text(
+                  _isGoogleLoading ? 'Signing in...' : 'Sign in with Google',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red, // Google's red color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 20),
             // Facebook login button
             /*
             ElevatedButton.icon(
