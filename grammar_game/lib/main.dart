@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+//! Must create android google client if we want this to work on android
 //Run flutter run -t lib/another_file.dart to start the app on phone when dubgging
 Future<void> main() async {
   print('Initializing Supabase');

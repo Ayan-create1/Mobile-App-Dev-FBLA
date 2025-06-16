@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/register.dart';
 import "package:grammar_game/pages/AboutMe/aboutMe.dart";
+import '../../home_page/home_page.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -69,6 +70,44 @@ class _SignInPageState extends State<SignInPage> {
               child: const Text("Login"),
             ),
 
+            SizedBox(height: 20),
+
+            // Facebook login button
+            /*
+            ElevatedButton.icon(
+              icon: Icon(Icons.facebook, color: Colors.white),
+              label: Text("Continue with Facebook"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF1877F2),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: () async {
+                try {
+                  await AuthService().signInWithFacebook();
+
+                  // On success, navigate to HomePage
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Facebook login failed: $e')),
+                  );
+                }
+              },
+            ),
+
+            SizedBox(height: 20),
+            */
+/*
+          Text(
+            _errorMessage,
+            style: TextStyle(
+              color: _errorMessage == 'Login successful!' ? Colors.green : Colors.red,
+            ),
+          ),
+          */
             //!Go to sign up page
             GestureDetector(
               onTap: () => Navigator.pushReplacement(

@@ -1,4 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -31,5 +32,28 @@ class AuthService {
     final session = _supabase.auth.currentSession;
     final user = session?.user;
     return user?.email;
+  }
+
+  Future<void> signInWithFacebook() async {
+    try {
+      final result = await FacebookAuth.instance.login();
+
+      if (result.status == LoginStatus.success) {
+        final accessToken = result.accessToken!.tokenString;
+
+        final response = await _supabase.auth.signInWithIdToken(
+          provider: OAuthProvider.facebook,
+          idToken: accessToken,
+        );
+
+        if (response.user == null) {
+          throw Exception('Facebook sign-in failed at Supabase.');
+        }
+      } else {
+        throw Exception('Facebook login failed: ${result.status}');
+      }
+    } catch (e) {
+      throw Exception('Facebook login error: $e');
+    }
   }
 }

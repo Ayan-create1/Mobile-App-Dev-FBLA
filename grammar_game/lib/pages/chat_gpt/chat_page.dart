@@ -2,8 +2,11 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:grammar_game/consts.dart';
+import 'package:grammar_game/pages/word_search/pop_up.dart';
 import '../home_page/home_page.dart';
 import 'dart:math';
+
+bool popup = true;
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -54,6 +57,13 @@ class _ChatPageState extends State<ChatPage>
 
   @override
   Widget build(BuildContext context) {
+    if (popup) {
+      // Schedule the iWordSPopup method to run after the build phase
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        iNeptPopup(context);
+        popup = false;
+      });
+    }
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
@@ -80,6 +90,19 @@ class _ChatPageState extends State<ChatPage>
             color: Colors.white,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.info),
+            color: Colors.white,
+            splashRadius: 50.0,
+            splashColor: Colors.black,
+            iconSize: screenWidth * 0.1,
+            onPressed: () {
+              iNeptPopup(context);
+              print("W");
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -102,6 +125,14 @@ class _ChatPageState extends State<ChatPage>
               containerColor: Colors.purple,
               textColor: Colors.white,
             ),
+            inputOptions: InputOptions(
+              sendButtonBuilder: (onSend) {
+                return IconButton(
+                  icon: const Icon(Icons.send, color: Colors.yellow),
+                  onPressed: onSend,
+                );
+              },
+            ),
             onSend: (ChatMessage mes) {
               getChatResponse(mes);
             },
@@ -112,6 +143,23 @@ class _ChatPageState extends State<ChatPage>
     );
   }
 
+/*
+  Widget _buildAstronautAvatar() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/astro_cut.png'), 
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+  */
   Future<void> getChatResponse(ChatMessage mes) async {
     final userMessage = ChatMessage(
       user: _currentUser,
