@@ -259,6 +259,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
                   questions[currentQuestionIndex]['question'],
                   style: TextStyle(
                     fontSize: screenWidth * 0.06, // Dynamic font size
+                    //question text color
                     color: Colors.white,
                   ),
                 ),
@@ -276,12 +277,15 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
             return Container(
               height: screenHeight * 0.08, // Dynamic height
               width: screenWidth * 0.5, // Dynamic width
+              //color of drop box
               color: Colors.grey[200],
               child: Center(
                 child: Text(
                   userAnswer.isEmpty ? 'Drop answer here' : userAnswer,
                   style: TextStyle(
-                      fontSize: screenWidth * 0.05, color: Colors.grey),
+                      //Color of drop box text
+                      fontSize: screenWidth * 0.05,
+                      color: Colors.grey),
                 ),
               ),
             );
@@ -312,8 +316,10 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
           child: Text(
             'CHECK ANSWER',
             style: TextStyle(
-              fontSize: screenWidth * 0.05, // Dynamic font size
+              fontSize: screenWidth * 0.06, // Dynamic font size
+              //color of text for answer button
               color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -430,13 +436,15 @@ class AnswerBox extends StatelessWidget {
       height: screenWidth * 0.1, // Dynamic height based on screen width
       width: screenWidth * 0.4, // Dynamic width based on screen width
       margin: EdgeInsets.all(screenWidth * 0.02), // Dynamic margin
+      //grey is color of tile when dragging, yellow is default color of tile
       color: isDragging ? Colors.grey[300] : Colors.yellow[300],
       child: Center(
         child: Text(
           answer,
           textAlign: TextAlign.center,
           style: TextStyle(
-              fontSize: screenWidth * 0.04,
+              fontSize: screenWidth * 0.045,
+              fontWeight: FontWeight.bold,
               color: Colors.black), // Dynamic font size
         ),
       ),

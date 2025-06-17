@@ -38,6 +38,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int points = 0;
+  int total_points = 0;
   static final authService = AuthService();
   /*
   void logout() async {
@@ -133,18 +134,20 @@ class _HomePageState extends State<HomePage> {
       try {
         final response = await Supabase.instance.client
             .from('profiles')
-            .select('points')
+            .select('points, total_points')
             .eq('id', user.id)
             .maybeSingle();
         if (response != null) {
           setState(() {
-            points = response['points'];
+            points = response['points'] ?? 0;
+            total_points = response['total_points'] ?? 0;
           });
         } else {
           print('No profile found');
           await Supabase.instance.client.from('profiles').insert({
             'id': user.id,
             'points': 0,
+            'total_points': 0,
             'username': user.email,
           });
         }
@@ -439,10 +442,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
           Positioned(
             bottom: screenHeight * .1,
-            right: screenWidth * .1,
+            right: screenWidth * .15,
+            child: Container(
+              height: screenHeight * .05,
+              width: screenWidth * .7,
+              decoration: BoxDecoration(
+                color: Colors.black45, // Background color
+                borderRadius: BorderRadius.circular(15), // Rounded corners
+              ),
+              child: Center(
+                child: Text(
+                  "Total Points: $total_points",
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: screenHeight * .05,
+            right: screenWidth * .10,
             child: Container(
               height: screenHeight * .05,
               width: screenWidth * .8,
@@ -452,9 +477,9 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Center(
                 child: Text(
-                  "Total Points: $points",
+                  "Available Points: $points",
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: Colors.orange[200],
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                   ),
