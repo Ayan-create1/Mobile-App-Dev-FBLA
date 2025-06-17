@@ -116,7 +116,8 @@ class _SignInPageState extends State<SignInPage> {
                           color: Colors.white,
                         ),
                       )
-                    : const Icon(Icons.login, color: Colors.white),
+                    : const Icon(Icons.g_mobiledata,
+                        color: Colors.white, size: 50.0),
                 label: Text(
                   _isGoogleLoading ? 'Signing in...' : 'Sign in with Google',
                   style: const TextStyle(
@@ -126,19 +127,20 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red, // Google's red color
-                  shape: RoundedRectangleBorder(
+                  /*shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
-                  ),
+                  ),*/
                 ),
               ),
             ),
 
             SizedBox(height: 20),
             // Facebook login button
-            /*
+
             ElevatedButton.icon(
-              icon: Icon(Icons.facebook, color: Colors.white),
-              label: Text("Continue with Facebook"),
+              icon: Icon(Icons.facebook, color: Colors.white, size: 30.0),
+              label: Text("Sign in with Facebook",
+                  style: TextStyle(color: Colors.white, fontSize: 15)),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF1877F2),
                 minimumSize: Size(double.infinity, 50),
@@ -161,7 +163,7 @@ class _SignInPageState extends State<SignInPage> {
             ),
 
             SizedBox(height: 20),
-            */
+
 /*
           Text(
             _errorMessage,

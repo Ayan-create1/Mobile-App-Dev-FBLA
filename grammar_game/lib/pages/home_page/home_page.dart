@@ -36,22 +36,21 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-/*class _HomePageState extends State<HomePage> {
-  int points = 0;
-  static final authService = AuthService();
-  void logout() async {
-    await authService.signOut();
-  }
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}*/
-
 class _HomePageState extends State<HomePage> {
   int points = 0;
   static final authService = AuthService();
+  /*
   void logout() async {
     await authService.signOut();
+  }
+*/
+  Future<void> logout() async {
+    try {
+      await authService.signOut();
+    } catch (e) {
+      print('Logout error: $e');
+      // You might want to show an error message to the user here
+    }
   }
 
   final Random _random = Random();
@@ -238,8 +237,32 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.logout),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () async {
+                // Wait for logout to complete before navigating
+                await logout();
+                if (context.mounted) {
+                  // Check if widget is still mounted
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => AuthGate()),
+                    (route) => false,
+                  );
+                }
+              },
+            ),
+          ),
           // Info button
           //*logout button
+          /*
           Positioned(
             top: 0,
             right: 0,
@@ -259,7 +282,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-
+*/
           //*Info button
           Positioned(
             top: 50,

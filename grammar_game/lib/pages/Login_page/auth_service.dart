@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'dart:math';
+import 'package:url_launcher/url_launcher.dart';
 
 class AuthService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -101,24 +102,13 @@ class AuthService {
 
   Future<void> signInWithFacebook() async {
     try {
-      final result = await FacebookAuth.instance.login();
-
-      if (result.status == LoginStatus.success) {
-        final accessToken = result.accessToken!.tokenString;
-
-        final response = await _supabase.auth.signInWithIdToken(
-          provider: OAuthProvider.facebook,
-          idToken: accessToken,
-        );
-
-        if (response.user == null) {
-          throw Exception('Facebook sign-in failed at Supabase.');
-        }
-      } else {
-        throw Exception('Facebook login failed: ${result.status}');
-      }
+      await _supabase.auth.signInWithOAuth(
+        OAuthProvider.facebook,
+        redirectTo: 'grammarGame://auth/callback',
+      );
     } catch (e) {
-      throw Exception('Facebook login error: $e');
+      print('Facebook login error: $e');
+      rethrow;
     }
   }
 }
