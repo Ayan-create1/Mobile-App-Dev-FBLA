@@ -11,6 +11,9 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
 import '../grammar_module/page1.dart';
+import '../shop/tiles/tile_preferences.dart';
+import '../shop/tiles/shop_service.dart';
+import '../shop/tiles/shop_ui.dart';
 
 bool popup = true;
 
@@ -182,6 +185,8 @@ class DragAndDropGameScreen extends StatefulWidget {
 }
 
 class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
+  final ShopService _shopService = ShopService();
+  TileSkin? _selectedSkin;
   List<Map<String, dynamic>> questions = [
     {
       'question':
@@ -229,6 +234,18 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
   void initState() {
     super.initState();
     questions.shuffle(); // Shuffle the questions to appear in random order
+    _loadSelectedSkin();
+  }
+
+  Future<void> _loadSelectedSkin() async {
+    try {
+      final skin = await _shopService.getSelectedSkin();
+      setState(() {
+        _selectedSkin = skin;
+      });
+    } catch (e) {
+      print('Error loading selected skin: $e');
+    }
   }
 
   @override
@@ -298,11 +315,22 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
               questions[currentQuestionIndex]['answers'].map<Widget>((answer) {
             return Draggable<String>(
               data: answer,
-              child: AnswerBox(answer: answer),
-              feedback: Material(
-                child: AnswerBox(answer: answer, isDragging: true),
+              child: AnswerBox(
+                answer: answer,
+                tileSkin: _selectedSkin,
               ),
-              childWhenDragging: AnswerBox(answer: answer, isDragging: true),
+              feedback: Material(
+                child: AnswerBox(
+                  answer: answer,
+                  isDragging: true,
+                  tileSkin: _selectedSkin,
+                ),
+              ),
+              childWhenDragging: AnswerBox(
+                answer: answer,
+                isDragging: true,
+                tileSkin: _selectedSkin,
+              ),
             );
           }).toList(),
         ),
@@ -424,6 +452,59 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
 class AnswerBox extends StatelessWidget {
   final String answer;
   final bool isDragging;
+  final TileSkin? tileSkin; // Add this parameter
+
+  const AnswerBox({
+    super.key,
+    required this.answer,
+    this.isDragging = false,
+    this.tileSkin,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    // Use custom skin colors or fallback to default
+    Color backgroundColor = isDragging
+        ? Colors.grey[300]!
+        : (tileSkin?.backgroundColor ?? Colors.yellow[300]!);
+
+    Color textColor = tileSkin?.textColor ?? Colors.black;
+
+    return Container(
+      padding: EdgeInsets.all(8),
+      height: screenWidth * 0.15,
+      width: screenWidth * 0.4,
+      margin: EdgeInsets.all(screenWidth * 0.02),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(8), // Optional: add rounded corners
+        border: Border.all(
+          // ignore: deprecated_member_use
+          color: backgroundColor.withOpacity(0.3),
+          width: 2,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          answer,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: screenWidth * 0.049,
+            fontWeight: FontWeight.w900,
+            fontFamily: 'Source Code Pro',
+            color: textColor,
+          ),
+        ),
+      ),
+    );
+  }
+}
+/*
+class AnswerBox extends StatelessWidget {
+  final String answer;
+  final bool isDragging;
 
   AnswerBox({required this.answer, this.isDragging = false});
 
@@ -451,3 +532,4 @@ class AnswerBox extends StatelessWidget {
     );
   }
 }
+*/

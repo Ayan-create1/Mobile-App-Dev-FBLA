@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:grammar_game/pages/shop/tiles/shop_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
@@ -10,6 +11,8 @@ import '../word_search/pop_up.dart';
 import 'dart:async';
 import '../AboutMe/aboutMe2.dart';
 import '../chat_gpt/chat_page.dart';
+import '../shop/tiles/shop_service.dart';
+import '../shop/tiles/tile_preferences.dart';
 
 // Custom Painter for the starry background
 class StarPainter extends CustomPainter {
@@ -40,6 +43,8 @@ class _HomePageState extends State<HomePage> {
   int points = 0;
   int total_points = 0;
   static final authService = AuthService();
+  final ShopService _shopService = ShopService();
+  TileSkin? _selectedSkin;
   /*
   void logout() async {
     await authService.signOut();
@@ -74,6 +79,7 @@ class _HomePageState extends State<HomePage> {
     fetchUserPoints();
     _initializePositions();
     _startFloatingAnimation();
+    _loadSelectedSkin();
   }
 
   void _initializePositions() {
@@ -125,6 +131,17 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  Future<void> _loadSelectedSkin() async {
+    try {
+      final skin = await _shopService.getSelectedSkin();
+      setState(() {
+        _selectedSkin = skin;
+      });
+    } catch (e) {
+      print('Error loading selected skin: $e');
+    }
   }
 
   Future<void> fetchUserPoints() async {
@@ -420,6 +437,26 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          Positioned(
+            top: 100,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+            ),
+          ),
           // Interactive Jupiter
           Positioned(
             top: screenHeight * 0.37,
