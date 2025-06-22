@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/register.dart';
 import "package:grammar_game/pages/AboutMe/aboutMe.dart";
+import 'package:grammar_game/pages/Policy/privacy_policy.dart';
 import '../../home_page/home_page.dart';
 
 class SignInPage extends StatefulWidget {
@@ -230,6 +231,37 @@ class _SignInPageState extends State<SignInPage> {
                   child: Center(
                       child: Text(
                     "Go to About Me",
+                    style: TextStyle(
+                        color: Colors.white,
+                        //fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          PrivacyPolicyScreen()), // Replace with the correct About Me Page class
+                  (route) => false, // Clears all previous routes
+                );
+              },
+              child: Center(
+                child: Container(
+                  height: 40,
+                  width: 180,
+                  decoration: BoxDecoration(
+                    color: Colors.purple, // Background color
+                    borderRadius: BorderRadius.circular(15), //
+                  ),
+                  child: Center(
+                      child: Text(
+                    "View Privacy Policy",
                     style: TextStyle(
                         color: Colors.white,
                         //fontWeight: FontWeight.bold,

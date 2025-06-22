@@ -85,7 +85,7 @@ class _ChatPageState extends State<ChatPage>
         ),
         backgroundColor: Colors.deepPurple[900],
         title: const Text(
-          'Speak to Astro',
+          'Ask Astro',
           style: TextStyle(
             color: Colors.white,
           ),
