@@ -408,7 +408,7 @@ class _HomePageState extends State<HomePage> {
             top: screenHeight * 0.5,
             right: screenWidth * 0.1,
             child: Image.asset(
-              'assets/Venus (1).png',
+              'assets/Venus_HotTopic (1).png',
               width: screenWidth * 0.3,
               height: screenWidth * 0.35,
             ),
