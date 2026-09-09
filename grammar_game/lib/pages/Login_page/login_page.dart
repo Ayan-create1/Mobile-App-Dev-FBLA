@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../home_page/home_page.dart';
+import 'auth_service.dart';
 
 //!Start on login page not home page
 void main() {
@@ -48,13 +49,50 @@ class LPage extends StatelessWidget {
               },
               child: Text('Login'),
             ),
-            
+            SizedBox(height: 20),
+
+            // Facebook login button
+            ElevatedButton.icon(
+              icon: Icon(Icons.facebook, color: Colors.white),
+              label: Text("Continue with Facebook"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF1877F2),
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: () async {
+                try {
+                  // Call your AuthService method here to login with Facebook
+                  await AuthService().signInWithFacebook();
+
+                  // On success, navigate to HomePage
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomePage()),
+                  );
+                } catch (e) {
+                  // Show error message
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Facebook login failed: $e')),
+                  );
+                }
+              },
+            ),
+
+            //SizedBox(height: 20),
+/*
+            Text(
+              _errorMessage,
+              style: TextStyle(
+                color: _errorMessage == 'Login successful!' ? Colors.green : Colors.red,
+              ),
+            ),*/
           ],
         ),
       ),
     );
   }
 }
+
 class RegistrationPage extends StatefulWidget {
   @override
   _RegistrationPageState createState() => _RegistrationPageState();

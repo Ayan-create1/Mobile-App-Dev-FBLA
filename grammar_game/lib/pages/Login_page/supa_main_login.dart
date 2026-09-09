@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+//import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 //Run flutter run -t lib/another_file.dart to start the app on phone when dubgging
 Future<void> main() async {

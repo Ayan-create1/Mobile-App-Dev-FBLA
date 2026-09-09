@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
-import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
 
 // Entry point of the Flutter app
-/*
-void main() {
+/*void main() {
   runApp(AboutMeApp());
 }
 */
+
 // Top-level widget for the app
 class AboutMeApp extends StatelessWidget {
   @override

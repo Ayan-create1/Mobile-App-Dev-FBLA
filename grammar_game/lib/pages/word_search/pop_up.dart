@@ -125,7 +125,7 @@ void iDragDPopup(BuildContext context) {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Follow the steps below:",
+                    "Follow the steps below",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,
@@ -173,6 +173,85 @@ void iDragDPopup(BuildContext context) {
   );
 }
 
+void iNeptPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "NeptAid",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Raleway',
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Learn to talk to Astro",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  //!Edit from this line
+                  _buildInstructionStep(
+                      "Enter a question into the given box and hit the send button to hear helpful advice from Astro. \nHere are some example questions below..."),
+                  _prompts("What is a (type of punctuation)"),
+                  _prompts(
+                      "Show how a (punctuation) is used in an example sentence"),
+                  _prompts("What is the (type of tense) tense in English"),
+                  _prompts("Or ask any other grammar questions you may have"),
+                  SizedBox(height: 15),
+                  ElevatedButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text("Got it!"),
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              bottom: -10, // Adjust to position outside the dialog
+              right: -10, // Adjust position
+              child: CircleAvatar(
+                backgroundColor: Colors.blueAccent,
+                radius: 40,
+                backgroundImage: AssetImage(
+                  'assets/astronaut.webp',
+                ), // Replace with your image
+              ),
+            ),
+            Positioned(
+              bottom: -10, // Adjust to position outside the dialog
+              left: -10, // Adjust position
+              child: CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 40,
+                backgroundImage: AssetImage(
+                  'assets/neptune_pop.png',
+                ), // Replace with your image
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 void iHomePopup(BuildContext context) {
   showDialog(
     context: context,
@@ -207,12 +286,15 @@ void iHomePopup(BuildContext context) {
                     ),
                   ),
                   SizedBox(height: 10),
-                  _buildInstructionStep("Uranian Search"),
-                  Text(
-                      "Explore the icy depths of Uranus by playing the classic Uranian version of Word Search. (10-20 points per correct question)"),
                   _buildInstructionStep("Gravity Drop"),
                   Text(
-                      "With constant storms and crazy gravitaty, try playing the classic Jupiterien version of Drag and Drop. (150-200 points per each completion)"),
+                      "With constant storms and crazy gravity, try playing the classic Jupiterien version of Drag and Drop. (10-20 points per correct question)"),
+                  _buildInstructionStep("Uranian Search"),
+                  Text(
+                      "Explore the icy depths of Uranus by playing the classic Uranian version of Word Search. (150-200 points per each completion)"),
+                  _buildInstructionStep("NeptAid"),
+                  Text(
+                      "If you need help, come to the calming ChatGPT based water planet Neptaid and ask our astronaut Astro your questions. (No points)"),
                   SizedBox(height: 15),
                   ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
@@ -222,7 +304,7 @@ void iHomePopup(BuildContext context) {
               ),
             ),
             Positioned(
-              top: 100, // Adjust to position outside the dialog
+              top: 200, // Adjust to position outside the dialog
               right: -40, // Adjust position
               child: Image.asset(
                 'assets/Uranian Search.png', // Replace with your image asset
@@ -232,10 +314,20 @@ void iHomePopup(BuildContext context) {
               ),
             ),
             Positioned(
-              top: 200, // Adjust to position outside the dialog
+              top: 100, // Adjust to position outside the dialog
               right: -40, // Adjust position
               child: Image.asset(
                 'assets/Jupiter.png', // Replace with your image asset
+                width: 60, // Set image width
+                height: 60, // Set image height
+                fit: BoxFit.contain, // Ensures the image is fully visible
+              ),
+            ),
+            Positioned(
+              top: 300, // Adjust to position outside the dialog
+              right: -40, // Adjust position
+              child: Image.asset(
+                'assets/Neptune AI (1).png', // Replace with your image asset
                 width: 60, // Set image width
                 height: 60, // Set image height
                 fit: BoxFit.contain, // Ensures the image is fully visible
@@ -258,6 +350,26 @@ Widget _buildInstructionStep(String text) {
         SizedBox(width: 8), // Space between icon and text
         Expanded(
           child: Text(text, style: TextStyle(fontSize: 14)), // Instruction text
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _prompts(String text) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 4),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(Icons.question_mark,
+            color: Colors.deepPurple, size: 20), // Bullet point icon
+        SizedBox(width: 8), // Space between icon and text
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(fontSize: 14),
+          ), // Instruction text
         ),
       ],
     ),

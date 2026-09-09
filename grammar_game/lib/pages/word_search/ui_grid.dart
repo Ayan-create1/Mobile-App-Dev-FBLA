@@ -36,6 +36,7 @@ final GlobalKey _gridKey = GlobalKey();
 
 //!Made using generative AI tools
 //*This class will display the wordsearch page
+
 class WordSearchGame extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -485,23 +486,26 @@ class _WordGridState extends State<WordSearchGame> {
     */
   }
 
-  Future<int> getCurrentUserPoints() async {
+  Future<Map<String, int>> getCurrentUserPoints() async {
     final user = Supabase.instance.client.auth.currentUser;
 
     if (user != null) {
       try {
         final data = await Supabase.instance.client
             .from('profiles')
-            .select('points')
+            .select('points, total_points')
             .eq('id', user.id)
             .single();
 
-        return data['points'] ?? 0;
+        return {
+          'points': data['points'] ?? 0,
+          'total_points': data['total_points'] ?? 0,
+        };
       } catch (e) {
         print('Error fetching current points: $e');
       }
     }
-    return 0;
+    return {'points': 0, 'total_points': 0};
   }
 
   Future<void> addPointsToUser(int pointsEarned) async {
@@ -509,14 +513,17 @@ class _WordGridState extends State<WordSearchGame> {
 
     if (user != null) {
       try {
-        int currentPoints = await getCurrentUserPoints();
-        int updatedPoints = currentPoints + pointsEarned;
+        Map<String, int> currentPoints = await getCurrentUserPoints();
+        int updatedPoints = currentPoints['points']! + pointsEarned;
+        int updatedTotalPoints = currentPoints['total_points']! + pointsEarned;
 
-        await Supabase.instance.client
-            .from('profiles')
-            .update({'points': updatedPoints}).eq('id', user.id);
+        await Supabase.instance.client.from('profiles').update({
+          'points': updatedPoints,
+          'total_points': updatedTotalPoints
+        }).eq('id', user.id);
 
         print('User points updated to $updatedPoints');
+        print('User total points updated to $updatedTotalPoints');
       } catch (e) {
         print('Error updating points: $e');
       }

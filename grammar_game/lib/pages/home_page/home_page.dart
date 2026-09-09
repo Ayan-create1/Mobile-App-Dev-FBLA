@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
 import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
+import 'package:grammar_game/pages/shop/tiles/shop_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
 import '../drag_and_drop/matching.dart';
@@ -9,7 +10,9 @@ import 'dart:math';
 import '../word_search/pop_up.dart';
 import 'dart:async';
 import '../AboutMe/aboutMe2.dart';
-
+import '../chat_gpt/chat_page.dart';
+import '../shop/tiles/shop_service.dart';
+import '../shop/tiles/tile_preferences.dart';
 
 // Custom Painter for the starry background
 class StarPainter extends CustomPainter {
@@ -36,28 +39,34 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-/*class _HomePageState extends State<HomePage> {
-  int points = 0;
-  static final authService = AuthService();
-  void logout() async {
-    await authService.signOut();
-  }
-
-  @override
-  _HomePageState createState() => _HomePageState();
-}*/
-
 class _HomePageState extends State<HomePage> {
   int points = 0;
+  int total_points = 0;
   static final authService = AuthService();
+  final ShopService _shopService = ShopService();
+  TileSkin? _selectedSkin;
+  /*
   void logout() async {
     await authService.signOut();
   }
+*/
+  Future<void> logout() async {
+    try {
+      await authService.signOut();
+    } catch (e) {
+      print('Logout error: $e');
+      // You might want to show an error message to the user here
+    }
+  }
+
   final Random _random = Random();
 
   // Rocket and punctuation positions and velocities
   late double _rocketX, _rocketY, _rocketDX, _rocketDY;
-  late List<double> _punctuationX, _punctuationY, _punctuationDX, _punctuationDY;
+  late List<double> _punctuationX,
+      _punctuationY,
+      _punctuationDX,
+      _punctuationDY;
 
   // Floating punctuation marks
   final List<String> _punctuationMarks = [':', ';', ',', '.', '!', '?'];
@@ -70,6 +79,7 @@ class _HomePageState extends State<HomePage> {
     fetchUserPoints();
     _initializePositions();
     _startFloatingAnimation();
+    _loadSelectedSkin();
   }
 
   void _initializePositions() {
@@ -78,14 +88,19 @@ class _HomePageState extends State<HomePage> {
     _rocketDX = _randomVelocity();
     _rocketDY = _randomVelocity();
 
-    _punctuationX = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
-    _punctuationY = List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
-    _punctuationDX = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
-    _punctuationDY = List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+    _punctuationX =
+        List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationY =
+        List.generate(_punctuationMarks.length, (_) => _random.nextDouble());
+    _punctuationDX =
+        List.generate(_punctuationMarks.length, (_) => _randomVelocity());
+    _punctuationDY =
+        List.generate(_punctuationMarks.length, (_) => _randomVelocity());
   }
 
   double _randomVelocity() {
-    return (_random.nextDouble() * 0.007 + 0.003) * (_random.nextBool() ? 1 : -1);
+    return (_random.nextDouble() * 0.007 + 0.003) *
+        (_random.nextBool() ? 1 : -1);
   }
 
   void _startFloatingAnimation() {
@@ -103,8 +118,10 @@ class _HomePageState extends State<HomePage> {
           _punctuationX[i] += _punctuationDX[i];
           _punctuationY[i] += _punctuationDY[i];
 
-          if (_punctuationX[i] < -0.2 || _punctuationX[i] > 1.2) _punctuationDX[i] = -_punctuationDX[i];
-          if (_punctuationY[i] < -0.2 || _punctuationY[i] > 1.2) _punctuationDY[i] = -_punctuationDY[i];
+          if (_punctuationX[i] < -0.2 || _punctuationX[i] > 1.2)
+            _punctuationDX[i] = -_punctuationDX[i];
+          if (_punctuationY[i] < -0.2 || _punctuationY[i] > 1.2)
+            _punctuationDY[i] = -_punctuationDY[i];
         }
       });
     });
@@ -116,6 +133,16 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  Future<void> _loadSelectedSkin() async {
+    try {
+      final skin = await _shopService.getSelectedSkin();
+      setState(() {
+        _selectedSkin = skin;
+      });
+    } catch (e) {
+      print('Error loading selected skin: $e');
+    }
+  }
 
   Future<void> fetchUserPoints() async {
     final user = Supabase.instance.client.auth.currentUser;
@@ -124,18 +151,20 @@ class _HomePageState extends State<HomePage> {
       try {
         final response = await Supabase.instance.client
             .from('profiles')
-            .select('points')
+            .select('points, total_points')
             .eq('id', user.id)
             .maybeSingle();
         if (response != null) {
           setState(() {
-            points = response['points'];
+            points = response['points'] ?? 0;
+            total_points = response['total_points'] ?? 0;
           });
         } else {
           print('No profile found');
           await Supabase.instance.client.from('profiles').insert({
             'id': user.id,
             'points': 0,
+            'total_points': 0,
             'username': user.email,
           });
         }
@@ -228,8 +257,32 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.logout),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12, // Relative to screen width
+              onPressed: () async {
+                // Wait for logout to complete before navigating
+                await logout();
+                if (context.mounted) {
+                  // Check if widget is still mounted
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => AuthGate()),
+                    (route) => false,
+                  );
+                }
+              },
+            ),
+          ),
           // Info button
           //*logout button
+          /*
           Positioned(
             top: 0,
             right: 0,
@@ -249,7 +302,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
           ),
-
+*/
           //*Info button
           Positioned(
             top: 50,
@@ -315,11 +368,32 @@ class _HomePageState extends State<HomePage> {
           Positioned(
             top: screenHeight * 0.27,
             right: screenWidth * 0.05,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        ChatPage(), // Replace with your desired page
+                  ),
+                  (route) => false,
+                );
+              },
+              child: Image.asset(
+                'assets/Neptune AI (1).png',
+                width: screenWidth * 0.25,
+                height: screenWidth * 0.25,
+              ),
+            ),
+            /*
+            top: screenHeight * 0.27,
+            right: screenWidth * 0.05,
             child: Image.asset(
-              'assets/Neptune (1).png',
+              'assets/Neptune AI (1).png',
               width: screenWidth * 0.25,
               height: screenWidth * 0.25,
-            ),
+              
+            ),*/
           ),
           Positioned(
             top: screenHeight * 0.4,
@@ -334,7 +408,7 @@ class _HomePageState extends State<HomePage> {
             top: screenHeight * 0.5,
             right: screenWidth * 0.1,
             child: Image.asset(
-              'assets/Venus (1).png',
+              'assets/Venus_HotTopic (1).png',
               width: screenWidth * 0.3,
               height: screenWidth * 0.35,
             ),
@@ -363,6 +437,26 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
 
+          Positioned(
+            top: 100,
+            right: 0,
+            child: IconButton(
+              icon: Icon(Icons.shopping_cart),
+              color: Colors.white,
+              splashRadius: 50.0,
+              splashColor: Colors.black,
+              iconSize: screenWidth * 0.12,
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ShopScreen(),
+                  ),
+                  (route) => false,
+                );
+              },
+            ),
+          ),
           // Interactive Jupiter
           Positioned(
             top: screenHeight * 0.37,
@@ -385,10 +479,32 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-
           Positioned(
             bottom: screenHeight * .1,
-            right: screenWidth * .1,
+            right: screenWidth * .15,
+            child: Container(
+              height: screenHeight * .05,
+              width: screenWidth * .7,
+              decoration: BoxDecoration(
+                color: Colors.black45, // Background color
+                borderRadius: BorderRadius.circular(15), // Rounded corners
+              ),
+              child: Center(
+                child: Text(
+                  "Total Points: $total_points",
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          Positioned(
+            bottom: screenHeight * .05,
+            right: screenWidth * .10,
             child: Container(
               height: screenHeight * .05,
               width: screenWidth * .8,
@@ -398,9 +514,9 @@ class _HomePageState extends State<HomePage> {
               ),
               child: Center(
                 child: Text(
-                  "Total Points: $points",
+                  "Available Points: $points",
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: Colors.orange[200],
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                   ),
