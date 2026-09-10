@@ -55,6 +55,8 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>FacebookAppID</key>
 	<string>503809062758173</string>
+	<key>FacebookClientToken</key>
+	<string>d6d66479eef05e3438ba97a3b4d2695b</string>
 	<key>FacebookDisplayName</key>
 	<string>Space Words</string>
 	<key>LSApplicationQueriesSchemes</key>
