@@ -1,7 +1,5 @@
 import "package:flutter/material.dart";
 import "package:grammar_game/pages/Login_page/auth_service.dart";
-import "package:grammar_game/pages/Login_page/pages/signin_page.dart";
-import "package:grammar_game/pages/home_page/home_page.dart";
 import "package:supabase_flutter/supabase_flutter.dart";
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 

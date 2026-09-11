@@ -14,18 +14,7 @@ class ShopService {
 
       // Debug: Check what we received
       print('Database response type: ${response.runtimeType}');
-      print('Database response length: ${response?.length ?? 0}');
-
-      // Handle null or empty response
-      if (response == null) {
-        print('Warning: Received null response from database');
-        return <TileSkin>[];
-      }
-
-      // Ensure response is a List
-      if (response is! List) {
-        throw Exception('Expected List but got ${response.runtimeType}');
-      }
+      print('Database response length: ${response.length ?? 0}');
 
       // Convert each item to TileSkin
       final List<TileSkin> skins = [];
@@ -33,12 +22,6 @@ class ShopService {
         try {
           final skinData = response[i];
           print('Processing skin $i: $skinData');
-
-          // Validate that skinData is a Map
-          if (skinData is! Map<String, dynamic>) {
-            print('Warning: Skin data at index $i is not a Map, skipping');
-            continue;
-          }
 
           final skin = TileSkin.fromJson(skinData);
           skins.add(skin);

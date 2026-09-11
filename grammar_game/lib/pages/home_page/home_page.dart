@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:grammar_game/pages/Login_page/auth_gate.dart';
 import 'package:grammar_game/pages/Login_page/auth_service.dart';
-import 'package:grammar_game/pages/Login_page/pages/signin_page.dart';
 import 'package:grammar_game/pages/shop/tiles/shop_ui.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../word_search/ui_grid.dart';
@@ -9,7 +8,6 @@ import '../drag_and_drop/matching.dart';
 import 'dart:math';
 import '../word_search/pop_up.dart';
 import 'dart:async';
-import '../AboutMe/aboutMe2.dart';
 import '../chat_gpt/chat_page.dart';
 import '../shop/tiles/shop_service.dart';
 import '../shop/tiles/tile_preferences.dart';

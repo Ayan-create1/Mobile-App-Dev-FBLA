@@ -13,7 +13,6 @@ import 'package:flutter/rendering.dart';
 import '../grammar_module/page1.dart';
 import '../shop/tiles/tile_preferences.dart';
 import '../shop/tiles/shop_service.dart';
-import '../shop/tiles/shop_ui.dart';
 
 bool popup = true;
 
@@ -285,7 +284,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
           ),
         ),
         DragTarget<String>(
-          onAccept: (data) {
+          onAcceptWithDetails: (data) {
             setState(() {
               userAnswer = data;
             });
@@ -338,7 +337,7 @@ class _DragAndDropGameScreenState extends State<DragAndDropGameScreen> {
         ElevatedButton(
           // ignore: deprecated_member_use
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
           ),
           onPressed: _checkAnswer,
           child: Text(

@@ -11,7 +11,7 @@ void main() {
       primarySwatch: Colors.orange,
       scaffoldBackgroundColor: Colors.orange.shade50,
       appBarTheme: AppBarTheme(
-        color: Colors.red.shade600,
+        backgroundColor: Colors.red.shade600,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -216,7 +216,7 @@ class _PracticeConceptsPageState extends State<PracticeConceptsPage> {
                             ),
                           );
                         },
-                        onAccept: (data) {
+                        onAcceptWithDetails: (data) {
                           setState(() {
                             _answers[question['sentence']] = data;
                           });

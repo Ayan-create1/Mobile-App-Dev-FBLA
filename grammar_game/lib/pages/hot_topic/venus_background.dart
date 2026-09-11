@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -68,7 +67,7 @@ class VenusPainter extends CustomPainter {
   }
 
   void _drawBubbles(Canvas canvas, Size size) {
-    final bubblePaint = Paint()..color = Colors.orangeAccent.withOpacity(0.7);
+    final bubblePaint = Paint()..color = Colors.orangeAccent.withValues(alpha: 0.7);
     for (int i = 0; i < 20; i++) {
       final x = (i * 40) % size.width;
       final offset = sin(animationValue * 2 * pi + i) *
@@ -80,7 +79,7 @@ class VenusPainter extends CustomPainter {
   }
 
   void _drawSmoke(Canvas canvas, Size size) {
-    final smokePaint = Paint()..color = Colors.grey.withOpacity(0.1);
+    final smokePaint = Paint()..color = Colors.grey.withValues(alpha: 0.1);
     for (int i = 0; i < 15; i++) {
       final x = size.width * 0.5 + sin(animationValue * 2 * pi + i) * 30;
       final y =

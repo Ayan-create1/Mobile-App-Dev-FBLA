@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../drag_and_drop/matching.dart';
 import '../grammar_module/page3.dart';
-import '../grammar_module/page2.dart';
 import '../grammar_module/page1.dart';
 import 'package:grammar_game/pages/home_page/home_page.dart';
 
@@ -19,7 +18,7 @@ class GrammarApp extends StatelessWidget {
         primarySwatch: Colors.orange,
         scaffoldBackgroundColor: Colors.orange.shade50,
         appBarTheme: AppBarTheme(
-          color: Colors.red.shade600,
+          backgroundColor: Colors.red.shade600,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

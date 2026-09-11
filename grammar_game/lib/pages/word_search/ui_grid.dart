@@ -12,8 +12,6 @@ import 'dart:typed_data';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
-import 'package:grammar_game/pages/Login_page/auth_gate.dart';
-import 'package:grammar_game/pages/Login_page/auth_service.dart';
 
 //import 'dart:async';
 Map<String, bool> highlightStatus = {};
@@ -201,7 +199,7 @@ class _WordGridState extends State<WordSearchGame> {
         return;
       }
 
-      final boundary = renderObject as RenderRepaintBoundary;
+      final boundary = renderObject;
 
       if (boundary.debugNeedsPaint) {
         print("Waiting for repaint to complete...");
